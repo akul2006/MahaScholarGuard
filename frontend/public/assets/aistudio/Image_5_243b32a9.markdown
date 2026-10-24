@@ -1,0 +1,245 @@
+---
+name: Civic Vanguard & Scholar Trust
+colors:
+  surface: '#f7f9fb'
+  surface-dim: '#d8dadc'
+  surface-bright: '#f7f9fb'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#f2f4f6'
+  surface-container: '#eceef0'
+  surface-container-high: '#e6e8ea'
+  surface-container-highest: '#e0e3e5'
+  on-surface: '#191c1e'
+  on-surface-variant: '#44474d'
+  inverse-surface: '#2d3133'
+  inverse-on-surface: '#eff1f3'
+  outline: '#75777e'
+  outline-variant: '#c5c6ce'
+  surface-tint: '#515f7a'
+  primary: '#000412'
+  on-primary: '#ffffff'
+  primary-container: '#0f1e36'
+  on-primary-container: '#7886a3'
+  inverse-primary: '#b8c7e6'
+  secondary: '#3755c3'
+  on-secondary: '#ffffff'
+  secondary-container: '#708cfd'
+  on-secondary-container: '#00217a'
+  tertiary: '#000605'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#00231f'
+  on-tertiary-container: '#13968a'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
+  primary-fixed: '#d7e3ff'
+  primary-fixed-dim: '#b8c7e6'
+  on-primary-fixed: '#0c1b33'
+  on-primary-fixed-variant: '#394761'
+  secondary-fixed: '#dde1ff'
+  secondary-fixed-dim: '#b8c4ff'
+  on-secondary-fixed: '#001453'
+  on-secondary-fixed-variant: '#173bab'
+  tertiary-fixed: '#89f5e7'
+  tertiary-fixed-dim: '#6bd8cb'
+  on-tertiary-fixed: '#00201d'
+  on-tertiary-fixed-variant: '#005049'
+  background: '#f7f9fb'
+  on-background: '#191c1e'
+  surface-variant: '#e0e3e5'
+typography:
+  headline-xl:
+    fontFamily: Inter
+    fontSize: 40px
+    fontWeight: '700'
+    lineHeight: 48px
+    letterSpacing: -0.02em
+  headline-xl-mobile:
+    fontFamily: Inter
+    fontSize: 30px
+    fontWeight: '700'
+    lineHeight: 38px
+    letterSpacing: -0.01em
+  headline-lg:
+    fontFamily: Inter
+    fontSize: 32px
+    fontWeight: '600'
+    lineHeight: 40px
+    letterSpacing: -0.015em
+  headline-lg-mobile:
+    fontFamily: Inter
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: 32px
+    letterSpacing: -0.01em
+  headline-md:
+    fontFamily: Inter
+    fontSize: 24px
+    fontWeight: '600'
+    lineHeight: 32px
+    letterSpacing: -0.01em
+  headline-sm:
+    fontFamily: Inter
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+  body-lg:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
+    lineHeight: 26px
+  body-md:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '400'
+    lineHeight: 22px
+  body-sm:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 18px
+  label-lg:
+    fontFamily: Inter
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: 20px
+    letterSpacing: 0.01em
+  label-md:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '600'
+    lineHeight: 16px
+    letterSpacing: 0.02em
+  label-sm:
+    fontFamily: Inter
+    fontSize: 11px
+    fontWeight: '500'
+    lineHeight: 14px
+    letterSpacing: 0.03em
+rounded:
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
+  full: 9999px
+spacing:
+  gutter: 1.5rem
+  gutter-mobile: 1rem
+  margin: 2rem
+  margin-mobile: 1rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2.5rem
+---
+
+## Brand & Style
+
+This design system establishes a high-integrity, institutional yet empathetic digital environment tailored for Maharashtra students, parents, and first-generation applicants navigating complex scholarship documentation.
+
+### Brand Personality & Emotional Tenor
+- **Authoritative & Reliable:** Evokes institutional credibility, precision, and diligence without the archaic bureaucracy or friction of standard legacy portals.
+- **Supportive & Guiding:** Reassuring, structured, and crystal-clear. It reduces cognitive overwhelm for students who cannot afford filing mistakes.
+- **Transparent & Independent:** Distinctly demarcates verified readiness criteria from direct governmental authority through clear, pristine status cues.
+
+### Aesthetic Direction: Modern Civic Clarity
+The aesthetic is a calibrated hybrid of **Modern Corporate** reliability and **Tactile Utility**:
+- **Structured Cadence:** High data density balanced by generous optical breathing room.
+- **Crisp Geometry:** High-contrast typographic scale paired with razor-sharp structural card layouts.
+- **Functional Semantics:** Purpose-driven chromatic signaling—every color informs document verification, warnings, or missing certificates with absolute lucidity.
+
+## Colors
+
+The palette leverages authoritative deep navy tones balanced by vibrant status semantics, grounded upon a clean, low-strain background.
+
+### Hierarchy & Functional Assignment
+- **Primary Navy (`#0F1E36`):** The foundation of trust. Anchors the primary headers, navigational structures, major brand landmarks, and primary actionable states.
+- **Secondary Royal Blue (`#1E40AF`):** Drives secondary interactions, navigational links, active selection rings, and progress tracks.
+- **Tertiary Teal / Emerald (`#0D9488`):** Reserved strictly for successful outcomes: "Verified", "Ready for Submission", "Seal Intact", and official readiness indicators.
+- **Neutral Foundation Canvas (`#F8FAFC`):** A soft, eye-protective tinted base that eliminates harsh white glare while making card containers pop.
+- **Surface Elevation (`#FFFFFF`):** Pure white reserved exclusively for interactive and static content containers.
+- **Structural Outlines (`#E2E8F0`):** Precise bounding lines that delineate sections and prevent visual bleed.
+
+### Semantic Intent & Status Palette
+- **Verified / Document Valid:** `#0D9488` (Teal) with subtle tint `#F0FDFA` for pill backgrounds.
+- **Warning / Review Needed:** `#D97706` (Warm Ochre) for minor discrepancies, impending expiration, or non-critical corrections.
+- **Missing / Action Required:** `#DC2626` (Crimson Soft) strictly reserved for missing documents, invalid stamps, or blocker items.
+
+## Typography
+
+The typography leverages **Inter** across all layers, calibrated specifically for legible data verification, form fields, and multilingual bilingual guidance (English/Marathi).
+
+### Reading Hierarchy & Contrast Rules
+- **Headers:** Rendered in `headline-xl` through `headline-sm` with tight tracking (`-0.02em` to `-0.01em`) in Primary Navy (`#0F1E36`) to produce firm visual anchors.
+- **Body & Guidance Text:** Set with relaxed line heights (`1.5` to `1.6`) to provide unhurried scanning of lengthy eligibility guidelines.
+- **Labels & Status Pills:** High-contrast, medium-to-bold weights with slight letter tracking (`0.01em` to `0.03em`) to distinguish metadata from operational inputs.
+
+## Layout & Spacing
+
+A disciplined 12-column grid system designed to scale gracefully from budget mobile devices (frequent among students) up to desktop verification workstations.
+
+### Grid & Breakpoints
+- **Desktop (1024px+):** 12-column fluid grid, `2rem` outer margins, `1.5rem` gutters. Maximum content canvas constrained to `1280px` for optimal reading ergonomics.
+- **Tablet (768px - 1023px):** 8-column grid, `1.5rem` outer margins, `1rem` gutters.
+- **Mobile (< 768px):** 4-column grid, `1rem` outer margins, `1rem` gutters. Cards and checklist matrices shift into vertical, linear cards.
+
+### Spacing Distribution
+- `space-xs` (4px) and `space-sm` (8px): Used for internal pill margins, icon-to-label offsets, and inline status badges.
+- `space-md` (16px): Standard gap for vertical form elements, document list stacks, and internal card padding on mobile.
+- `space-lg` (24px): Standard desktop container padding and inter-card distances.
+- `space-xl` (40px): Section dividers and module headers.
+
+## Elevation & Depth
+
+To preserve an authentic, clear civic interface, this system rejects intense blur filters and heavy drop shadows in favor of crisp delineation through borders and gentle ambient depth.
+
+### Depth Hierarchy
+- **Level 0 (Canvas Base):** Background canvas in `#F8FAFC`. Zero elevation.
+- **Level 1 (Default Containers & Cards):** Pure white surface (`#FFFFFF`) framed with a `1px` solid outline in `#E2E8F0`. Elevation supported by a restrained ambient drop: `box-shadow: 0 1px 3px 0 rgba(15, 30, 54, 0.05), 0 1px 2px -1px rgba(15, 30, 54, 0.05)`.
+- **Level 2 (Active Document Cards & Hover States):** Sustained `1px` border (shifting to `#CBD5E1` on interaction) lifted with: `box-shadow: 0 4px 6px -1px rgba(15, 30, 54, 0.07), 0 2px 4px -2px rgba(15, 30, 54, 0.05)`.
+- **Level 3 (Modal Alerts & Document Preview Drawers):** High-priority overlays: `box-shadow: 0 10px 15px -3px rgba(15, 30, 54, 0.1), 0 4px 6px -4px rgba(15, 30, 54, 0.05)`.
+- **Level 4 (Non-Governmental Disclaimer Banners):** Floating or inline alert boxes use zero shadow, a `1px` border in amber or slate, and a gentle tinted fill to maintain an objective tone.
+
+## Shapes
+
+The design system employs a **Rounded** shape language (`roundedness: 2`). This provides a balance between formal structure and approachable ergonomics.
+
+### Corner Radius Standards
+- **Interactive Controls (Buttons, Inputs):** `0.5rem` (8px). Delivers a modern, click-accessible structure without childlike over-rounding.
+- **Cards, Panels, and Containers:** `rounded-lg` (`1rem` / 16px). Softens large content sections while maintaining rectangular discipline.
+- **Modals & Drawers:** `rounded-xl` (`1.5rem` / 24px) for desktop containers, or pinned flat on bottom sheets for mobile.
+- **Status Tags, Badges & Pills:** Full pill format (`9999px`) to create an immediate visual distinction between status metadata and actionable square buttons.
+
+## Components
+
+### Buttons
+- **Primary Action (e.g., "Verify Document", "Run Readiness Check"):** Solid `#0F1E36` fill, `#FFFFFF` label text, `0.5rem` radius. Hover state transitions to `#1E40AF`.
+- **Secondary Action (e.g., "Upload Alternative", "Save Draft"):** Transparent fill with a `1.5px` border in `#1E40AF` and text in `#1E40AF`.
+- **Tertiary / Utility:** Flat transparent button with subtle `#0F1E36` text; turns `#F1F5F9` on hover.
+
+### Document Status Badges & Pills
+- Built with a `9999px` border radius, high-legibility `label-sm` or `label-md` weight, and an inline status indicator dot or icon.
+- **Verified / Ready:** Emerald surface (`#F0FDFA`), emerald border (`#CCFBF1`), deep teal text (`#0F766E`).
+- **Needs Review:** Warm Ochre surface (`#FFFBEB`), amber border (`#FDE68A`), dark amber text (`#92400E`).
+- **Missing / Action Required:** Crimson Soft surface (`#FEF2F2`), soft crimson border (`#FECACA`), dark red text (`#991B1B`).
+
+### Document Checklist Cards
+- Background: `#FFFFFF`.
+- Perimeter: `1px` solid `#E2E8F0`.
+- Internal Layout: Left indicator showing status icon, title with Marathi/English bilingual subtext, file upload metadata, and a right-aligned action trigger button.
+- Focus/Reviewing State: Left border thickness upgrades to `4px` solid in the respective state color (`#0D9488`, `#D97706`, or `#DC2626`).
+
+### Input Fields & Upload Drops
+- **Input Fields:** Pure white background, `1px` border in `#CBD5E1`, internal padding `space-sm` to `space-md`, text in `#0F1E36`. Active focus state generates a `2px` ring in `#1E40AF` with zero glow.
+- **Upload Dropzones:** Subtle dashed line (`2px`) in `#94A3B8` over `#F8FAFC`, transitioning to `#1E40AF` dashed border with `#EFF6FF` background when a document is dragged over.
+
+### Checkboxes & Radio Buttons
+- Crisp `0.25rem` radius on checkboxes, full circular radius on radio buttons.
+- Border in `#94A3B8`, switching to a solid `#1E40AF` fill with white checkmark when checked.
+
+### Non-Governmental Disclaimer Ribbon
+- High-prominence, muted informational banner positioned atop key flows.
+- Styled with a `1px` solid border in `#CBD5E1`, neutral slate fill (`#F1F5F9`), displaying an informational shield icon and unequivocal microcopy: *"Independent Scholarship Assistant. Not an official agency of MahaDBT or the Government of Maharashtra."*

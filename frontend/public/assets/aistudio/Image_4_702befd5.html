@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>MahaScholar Guard</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#394761","tertiary-fixed-dim":"#6bd8cb","inverse-primary":"#b8c7e6","on-error":"#ffffff","surface-container-high":"#e6e8ea","on-surface":"#191c1e","outline-variant":"#c5c6ce","on-error-container":"#93000a","on-surface-variant":"#44474d","primary-container":"#0f1e36","error":"#ba1a1a","surface":"#f7f9fb","on-secondary-container":"#00217a","on-tertiary-container":"#13968a","surface-container":"#eceef0","on-primary-container":"#7886a3","on-secondary-fixed-variant":"#173bab","surface-tint":"#515f7a","secondary-fixed":"#dde1ff","secondary-fixed-dim":"#b8c4ff","secondary":"#3755c3","on-tertiary":"#ffffff","primary":"#000412","background":"#f7f9fb","tertiary-container":"#00231f","on-tertiary-fixed-variant":"#005049","on-primary":"#ffffff","tertiary":"#000605","primary-fixed":"#d7e3ff","on-tertiary-fixed":"#00201d","surface-container-low":"#f2f4f6","surface-container-lowest":"#ffffff","on-primary-fixed":"#0c1b33","on-secondary-fixed":"#001453","outline":"#75777e","secondary-container":"#708cfd","inverse-on-surface":"#eff1f3","surface-variant":"#e0e3e5","surface-bright":"#f7f9fb","error-container":"#ffdad6","on-background":"#191c1e","tertiary-fixed":"#89f5e7","surface-dim":"#d8dadc","surface-container-highest":"#e0e3e5","on-secondary":"#ffffff","primary-fixed-dim":"#b8c7e6","inverse-surface":"#2d3133"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"2rem","gutter":"1.5rem","space-sm":"0.5rem","space-xl":"2.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-md":"1rem","margin-mobile":"1rem","gutter-mobile":"1rem"},"fontFamily":{"label-lg":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"label-sm":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"label-md":["Inter"],"headline-xl-mobile":["Inter"],"headline-xl":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"body-lg":["Inter"]},"fontSize":{"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-surface-container-low px-margin py-space-xs"><div class="max-w-[1280px] mx-auto flex items-center justify-between text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span><span class="font-label-sm text-label-sm">Independent Advisory Tool • Non-governmental scholarship readiness checker for Maharashtra applicants</span></div><div class="flex items-center gap-space-md"><span class="font-label-sm text-label-sm text-on-surface-variant">Citizen Advisory Helpline: active</span><span class="h-3 w-px bg-outline-variant"></span><span class="font-label-sm text-label-sm text-secondary font-semibold">SPPU Intake 2024-25</span></div></div></div><div class="h-20 max-w-[1280px] mx-auto px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg flex-shrink-0"><div class="flex items-center gap-space-sm"><img alt="MahaScholar Guard Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UKIYbiGDKhP-WmUe5HFCrLfb1BXruGka4OeMVKMkxCoZHwKhtzDeBkn6jyIIOyFbTZkaXkMd4rc00re6FbzAIIP3p9DNPdyvom4BYxzvzbd6CRRdqn9KgCCmXXfCtqh-0zvMt_46PbnJyRA0wcMHFlc2qFkj8_vSwM_iGbPawap0ecc_T8zZjcjqKZa7yFM0XOXxKuzW5VRQDmIBdJxiLrZdeM6wskWZjDW3R5Vacz1_RRLxfcJnSmiyPB"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">MahaScholar Guard</span><span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-space-xs py-0.5 rounded">Beta</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Document Readiness Assistant</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-bold rounded-lg"><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="home" href="#">Home</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="scheme-selection" href="#">Scheme Selection</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="upload-wizard" href="#">Upload Wizard</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="document-review" href="#">Document Review</a><a aria-current="page" class="px-space-sm py-2 transition-colors bg-primary-container text-on-primary font-bold rounded-lg" data-path="readiness-report" href="#">Readiness Report</a></nav><div class="flex items-center gap-space-md flex-shrink-0"><button class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-sm text-label-sm focus:outline-none focus:ring-2 focus:ring-secondary" type="button"><span class="material-symbols-outlined text-[16px]">translate</span><span>English / मराठी</span></button><button aria-label="Notifications" class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-secondary" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-sm pl-space-xs py-1 rounded-lg"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgZUuzn0BvzF9TWOwkSGmgJ4lZbgDmtaCFWX_F3QXWAJuFaqKL-ZuRr67zKk3yq0LCWrobIfSyvJ1xsq-SeffZ0hghotUUOvF-qaEnbi1S4cDfJT7tWYv-f99kaOhTem9JTMJKRwpovJkYcLL_HvsLejJb3NsrwcsZjmvquA6hXSh05nfoFoDJUyRokm1pKG6Kqzg4UoAdFh-ymj4iwILeHQ0IMu_EHkWS9R7iiCTZkystxbnDNMgB0A"/><div class="flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Aarav Deshmukh (SPPU Pune)</span><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span><span class="font-label-sm text-label-sm text-on-surface-variant">FY B.Tech</span></div></div></div></div></div></header><main class="w-full pt-20 bg-background flex-1"><div class="max-w-[1280px] mx-auto px-margin py-space-lg"><div class="flex flex-col w-full">
+<!-- Sub-Header / Breadcrumb Path -->
+<div class="flex items-center gap-space-xs mb-space-md text-on-surface-variant font-label-sm text-label-sm overflow-x-auto whitespace-nowrap py-1">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">home</span>
+<span>Dashboard</span>
+</a>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Document Checks</a>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="text-on-surface font-semibold">Check #MSG-2025-0842</span>
+<span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
+<span class="bg-primary text-on-primary px-space-xs py-0.5 rounded font-label-sm text-label-sm font-medium">Readiness Report</span>
+</div>
+<!-- Hero Header Card -->
+<div class="relative bg-surface-container-lowest rounded-xl shadow-sm p-space-lg mb-space-lg overflow-hidden">
+<!-- Subtle Institutional Backdrop Decor -->
+<div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-secondary-container/10 pointer-events-none blur-3xl"></div>
+<div class="absolute right-32 top-8 text-surface-container-highest/60 select-none pointer-events-none hidden lg:block">
+<span class="material-symbols-outlined text-[140px] leading-none">policy</span>
+</div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-space-xs max-w-3xl">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">verified</span> Pre-Submission Audit
+          </span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Application Prep ID: <span class="font-semibold text-on-surface">MSG-2025-0842</span></span>
+<span class="text-outline-variant">•</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">Generated: 18 Oct 2024, 11:42 IST</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight mt-1">
+          Document Readiness Audit Report
+        </h1>
+<div class="mt-space-xs bg-surface-container-low p-space-sm rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5 flex-shrink-0">account_balance</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Target Scholarship Scheme</span>
+<span class="font-label-lg text-label-lg text-on-surface">
+              Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Scheme (EBC)
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+              Higher &amp; Technical Education Dept • Candidate: <strong class="text-on-surface font-semibold">Aarav Ramesh Deshmukh</strong> (SPPU/COEP Pune)
+            </span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-row lg:flex-col sm:flex-row gap-space-xs flex-shrink-0">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-space-xs px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md hover:bg-secondary transition-all shadow-sm" id="btn-download-pdf" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download PDF Report</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<button class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" onclick="alert('Sharable verification link copied to clipboard: msg-portal.in/audit/MSG-2025-0842')" type="button">
+<span class="material-symbols-outlined text-[16px]">share</span>
+<span>Share Summary</span>
+</button>
+<button class="flex-1 flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm hover:bg-surface-container-high transition-colors" onclick="window.print()" type="button">
+<span class="material-symbols-outlined text-[16px]">print</span>
+<span>Print Checklist</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Metric Dashboard (4 Columns) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md mb-space-lg">
+<!-- Card 1: Overall Readiness -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-start justify-between gap-space-sm mb-space-sm">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Overall Readiness</span>
+<span class="font-headline-md text-headline-md text-primary mt-1">78%</span>
+</div>
+<!-- Mini Radial SVG Progress Gauge -->
+<div class="relative w-14 h-14 flex items-center justify-center flex-shrink-0">
+<svg class="w-14 h-14 -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="78, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-sm text-label-sm font-semibold text-secondary">78%</span>
+</div>
+</div>
+<div>
+<div class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm mb-space-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">warning</span> Needs Attention
+        </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+          2 items require verification before final submission on MahaDBT portal.
+        </p>
+</div>
+<div class="mt-space-sm pt-space-xs text-[10px] text-outline flex items-center gap-1 leading-tight">
+<span class="material-symbols-outlined text-[12px]">info</span>
+<span>Advisory guidance only. Official approval rests solely with the competent authority.</span>
+</div>
+</div>
+<!-- Card 2: Complete & Verified -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Complete &amp; Verified</span>
+<span class="font-headline-md text-headline-md text-tertiary-container mt-1">4 Documents</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined text-[22px]">verified</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="flex items-center gap-1.5 mb-2">
+<span class="h-1.5 flex-1 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="h-1.5 flex-1 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="h-1.5 flex-1 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="h-1.5 flex-1 rounded-full bg-tertiary-fixed-dim"></span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Domicile, Fee Receipt, Ration Card &amp; Aadhaar Card pass schema heuristics.
+        </p>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-sm text-label-sm text-on-tertiary-container font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Ready to archive
+        </span>
+</div>
+</div>
+<!-- Card 3: Needs Review -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Needs Review</span>
+<span class="font-headline-md text-headline-md text-on-secondary-fixed-variant mt-1">2 Flagged</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined text-[22px]">rule</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="bg-surface-container-low px-2 py-1.5 rounded text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-1 font-semibold text-primary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Name match variation
+          </div>
+<div class="flex items-center gap-1 font-semibold text-primary mt-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Barcode validity query
+          </div>
+</div>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-sm text-label-sm text-secondary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span> Student action suggested
+        </span>
+</div>
+</div>
+<!-- Card 4: Missing Required -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Missing Required</span>
+<span class="font-headline-md text-headline-md text-error mt-1">1 Critical</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[22px]">crisis_alert</span>
+</div>
+</div>
+<div class="mt-space-md">
+<div class="bg-error-container/40 p-2 rounded text-on-surface">
+<span class="font-label-md text-label-md text-error block">Income Certificate</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tahsildar certified for FY 24-25 pending</span>
+</div>
+</div>
+<div class="mt-space-xs">
+<span class="font-label-sm text-label-sm text-error font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">priority_high</span> Mandatory for EBC benefit
+        </span>
+</div>
+</div>
+</div>
+<!-- Interactive Filter & Search Bar -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm mb-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+<button class="filter-tab active-filter px-space-md py-1.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md transition-colors" data-filter="all" type="button">
+        All Findings (7)
+      </button>
+<button class="filter-tab px-space-md py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors" data-filter="missing" type="button">
+        Missing (1)
+      </button>
+<button class="filter-tab px-space-md py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors" data-filter="review" type="button">
+        Needs Review (2)
+      </button>
+<button class="filter-tab px-space-md py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-colors" data-filter="verified" type="button">
+        Verified Ready (4)
+      </button>
+</div>
+<!-- Search Input Field -->
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-outline">search</span>
+<input class="w-full pl-9 pr-4 py-2 bg-surface-container-low rounded-lg text-on-surface font-body-sm text-body-sm focus:outline-none focus:bg-surface-container-lowest shadow-sm placeholder:text-outline" id="finding-search" placeholder="Filter by document name or field..." type="text"/>
+</div>
+</div>
+<!-- Detailed Findings & Discrepancies Matrix -->
+<div class="flex flex-col gap-space-md mb-space-xl" id="findings-container">
+<!-- Item 1: MISSING REQUIRED (Critical) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="income certificate tahsildar sdo 800000 ebc" data-type="missing">
+<div class="bg-error-container/30 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-error font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+<span>ACTION REQUIRED • MISSING CORE DOCUMENT</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 01: Financial Eligibility</span>
+</div>
+<div class="p-space-lg flex flex-col lg:flex-row gap-space-lg items-start justify-between">
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-primary">Annual Income Certificate (उत्पन्नाचा दाखला)</h2>
+<span class="px-2 py-0.5 rounded bg-error-container text-error font-label-sm text-label-sm font-semibold">Mandatory</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed mt-1">
+<strong>Flag Reason:</strong> The Rajarshi Shahu Maharaj EBC scheme strictly requires a competent revenue authority certificate (Tahsildar / Naib Tahsildar / Sub-Divisional Officer) certifying total gross family annual income <strong class="text-error">does not exceed ₹8,00,000/-</strong> for Assessment Year 2024–25.
+          </p>
+<div class="bg-surface-container-low p-space-sm rounded-lg mt-2 flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">tips_and_updates</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Recommended Remediation Action:</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Download your digitally signed Barcoded certificate from <em class="font-semibold text-primary">Aaple Sarkar (aaplesarkar.mahaonline.gov.in)</em> or obtain Form 16 / Revenue Patwari certificate. Once received, upload the clear scanned PDF (under 256 KB) below.
+              </p>
+</div>
+</div>
+</div>
+<!-- Action Module -->
+<div class="w-full lg:w-72 bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-sm flex-shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Fast-track upload</span>
+<div class="bg-surface-container-lowest p-3 rounded-lg text-center flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container-high transition-colors" onclick="document.getElementById('hidden-income-file').click()">
+<span class="material-symbols-outlined text-secondary text-[32px]">upload_file</span>
+<span class="font-label-md text-label-md text-primary mt-1">Select Income PDF</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">PDF, Max 256 KB</span>
+<input accept=".pdf" class="hidden" id="hidden-income-file" onchange="alert('Income Certificate mock-uploaded. Re-evaluating status in background...')" type="file"/>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary transition-all flex items-center justify-center gap-1 shadow-sm" onclick="document.getElementById('hidden-income-file').click()" type="button">
+<span class="material-symbols-outlined text-[16px]">cloud_upload</span>
+<span>Upload Income Certificate Now</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 2: NEEDS REVIEW (Name Inconsistency) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="name consistency character mismatch aadhaar mark sheet aarav ramesh" data-type="review">
+<div class="bg-secondary-fixed/50 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-secondary-fixed-variant font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>NEEDS REVIEW • IDENTITY CROSS-VERIFICATION</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 02: Aadhaar Seeding Heuristic</span>
+</div>
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Name Consistency Check: Character Mismatch Detected</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Differences detected between Board Qualifying Marksheet &amp; Aadhaar Card Identity Data.
+            </p>
+</div>
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm px-3 py-1 rounded-full font-semibold flex items-center gap-1 self-start">
+<span class="material-symbols-outlined text-[14px]">psychology</span> Scrutiny Risk: Medium
+          </span>
+</div>
+<!-- Comparative Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md bg-surface-container-low p-space-md rounded-xl">
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Document A: Aadhaar Card UID</span>
+<span class="material-symbols-outlined text-secondary text-[16px]">badge</span>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface font-mono tracking-tight text-primary">
+              DESHMUKH AARAV RAMESH
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Extracted from UIDAI e-Aadhaar QR stream</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg flex flex-col gap-1 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-error uppercase">Document B: HSC (12th) Marksheet</span>
+<span class="material-symbols-outlined text-error text-[16px]">history_edu</span>
+</div>
+<span class="font-label-lg text-label-lg text-on-surface font-mono tracking-tight text-error font-semibold">
+              DESHMUKH AARAV R.
+            </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Father name truncated to initial 'R.'</span>
+</div>
+</div>
+<div class="flex flex-col gap-space-xs">
+<p class="font-body-md text-body-md text-on-surface">
+<strong>Flag Reason:</strong> While both documents refer to the candidate, MahaDBT scrutiny desks at institutes routinely flag abbreviated father initials when cross-referencing candidate profile demographic details against Board Marks.
+          </p>
+<div class="bg-surface-container-high/60 p-space-sm rounded-lg flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[18px] mt-0.5">verified_user</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong>College Desk Advice:</strong> In SPPU Pune institutes, submitting the standard college self-affidavit (Annexure A) or an Aadhaar Authentication Consent form during in-person desk scrutiny prevents application rejection or return-with-remarks.
+            </p>
+</div>
+</div>
+<!-- OCR Accordion & Remediation Buttons -->
+<div class="flex flex-col gap-space-sm pt-2">
+<details class="group bg-surface-container-low rounded-lg p-space-sm transition-all">
+<summary class="flex items-center justify-between cursor-pointer font-label-md text-label-md text-on-surface select-none">
+<span class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">document_scanner</span>
+<span>View Side-by-Side OCR comparison snippet</span>
+</span>
+<span class="material-symbols-outlined text-[18px] transition-transform group-open:rotate-180 text-outline">expand_more</span>
+</summary>
+<div class="mt-space-sm pt-space-xs grid grid-cols-1 md:grid-cols-2 gap-space-sm text-xs font-mono bg-surface-container-lowest p-space-sm rounded">
+<div class="overflow-x-auto p-2 bg-surface-container-low rounded">
+<div class="font-bold text-primary mb-1">Aadhaar OCR Dump:</div>
+<div class="text-on-surface-variant leading-relaxed">
+                  Name: Aarav Ramesh Deshmukh<br/>
+                  YOB: 2006 | Gender: Male<br/>
+                  Father: Ramesh Keshav Deshmukh<br/>
+                  UID: XXXX-XXXX-4912
+                </div>
+</div>
+<div class="overflow-x-auto p-2 bg-surface-container-low rounded">
+<div class="font-bold text-primary mb-1">Maharashtra HSC Board OCR Dump:</div>
+<div class="text-on-surface-variant leading-relaxed">
+                  Candidate: DESHMUKH AARAV R.<br/>
+                  Mother: SUNITA<br/>
+                  Roll No: P091823 | Seat: 4091<br/>
+                  Passing Year: FEB-2024
+                </div>
+</div>
+</div>
+</details>
+<div class="flex flex-wrap items-center gap-space-xs mt-1">
+<button class="px-space-md py-2 rounded-lg bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-dim transition-colors flex items-center gap-1" onclick="alert('Opened record editor modal for candidate Aarav Deshmukh.')" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span>Edit Extracted Record</span>
+</button>
+<button class="px-space-md py-2 rounded-lg bg-primary-container text-on-primary font-label-sm text-label-sm hover:bg-secondary transition-colors flex items-center gap-1 shadow-sm" onclick="this.innerHTML='&lt;span class=\'material-symbols-outlined text-[16px]\'&gt;check&lt;/span&gt; Verified by Candidate'; this.classList.add('bg-tertiary-fixed','text-on-tertiary-container');" type="button">
+<span class="material-symbols-outlined text-[16px]">thumb_up</span>
+<span>Mark as Verified by Student</span>
+</button>
+<span class="font-body-sm text-body-sm text-outline ml-auto hidden sm:inline">Self-verification logged to audit log</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 3: NEEDS REVIEW (Validity Date & Barcode) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="domicile residence certificate validity date barcode aaple sarkar" data-type="review">
+<div class="bg-secondary-fixed/50 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-secondary-fixed-variant font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">info</span>
+<span>NEEDS REVIEW • ISSUANCE AGE &amp; BARCODE VERIFICATION</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 03: Residency Compliance</span>
+</div>
+<div class="p-space-lg flex flex-col lg:flex-row gap-space-lg items-start justify-between">
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm text-primary">Certificate Validity Date: Fiscal Year Verification</h2>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold">Maharashtra Domicile</span>
+</div>
+<div class="flex items-center gap-space-md mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Cert No: <strong class="text-on-surface">DOM/2021/78912</strong></span>
+<span>•</span>
+<span>Issued Date: <strong class="text-on-surface">14 Aug 2021</strong> (3.2 years old)</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed mt-1">
+<strong>Flag Reason:</strong> While Domicile Certificates issued by Maharashtra State are legally valid for a lifetime unless explicitly revoked, certain autonomous engineering colleges (like COEP/VJTI) require barcoded certificates issued via the digital Aaple Sarkar system to ensure instantaneous online verification without clerk queries.
+          </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong>Recommended Action:</strong> Scan the QR code present at the bottom-left of your certificate with any standard reader or click below to check if Aaple Sarkar returns the valid repository ledger match.
+          </p>
+</div>
+<div class="w-full lg:w-64 bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-sm flex-shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Aaple Sarkar Scan</span>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[24px]">qr_code_scanner</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-primary font-semibold">Barcode Detected</span>
+<span class="text-[11px] text-on-surface-variant">Payload: MAH/DOM/2021/78912</span>
+</div>
+</div>
+<button class="w-full py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary transition-all flex items-center justify-center gap-1 shadow-sm" id="btn-verify-barcode" onclick="this.innerHTML='&lt;span class=\'material-symbols-outlined text-[16px]\'&gt;verified&lt;/span&gt; Barcode Confirmed Valid'; this.disabled=true; this.classList.add('bg-tertiary-fixed','text-on-tertiary-container')" type="button">
+<span class="material-symbols-outlined text-[16px]">check_box</span>
+<span>Confirm Barcode Valid</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 4: VERIFIED READY (College Fee Receipt) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="college admission fee receipt bonafide coep tech engineering" data-type="verified">
+<div class="bg-tertiary-fixed/30 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-tertiary-container font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>VERIFIED READY • VALID SCHEME ATTACHMENT</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 04: Academic Enrollment</span>
+</div>
+<div class="p-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[26px]">school</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary">College Admission Fee Receipt &amp; Bonafide</h2>
+<span class="font-body-md text-body-md text-on-surface mt-0.5">
+              College of Engineering Pune (COEP) Tech — First Year B.Tech (Computer Eng)
+            </span>
+<div class="flex flex-wrap items-center gap-space-md mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Receipt: <strong class="text-on-surface">COEP/ADM/2024/0914</strong></span>
+<span>•</span>
+<span>Paid: ₹15,000 (CAP Interim)</span>
+<span>•</span>
+<span>Date: 28 Aug 2024</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Matches 2024-25
+          </span>
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant" onclick="alert('Viewing original Fee Receipt preview')" title="View Document" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 5: VERIFIED READY (Aadhaar & Bank Seeding) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="aadhaar card uidai linked masked npc bank dbt" data-type="verified">
+<div class="bg-tertiary-fixed/30 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-tertiary-container font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>VERIFIED READY • DIRECT BENEFIT TRANSFER (DBT) SEEDING</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 05: NPCI Linkage</span>
+</div>
+<div class="p-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[26px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary">Aadhaar Card (UIDAI Linked &amp; Masked)</h2>
+<span class="font-body-md text-body-md text-on-surface mt-0.5">
+              Aadhaar Seeded Status: Active with Bank of Maharashtra (A/C ending in 4102)
+            </span>
+<div class="flex flex-wrap items-center gap-space-md mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Masked UID: <strong class="text-on-surface">XXXX-XXXX-4912</strong></span>
+<span>•</span>
+<span>Mobile OTP Seeding: Linked</span>
+<span>•</span>
+<span>NPCI Mapping: Active</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> DBT Ready
+          </span>
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant" onclick="alert('Viewing Masked Aadhaar copy')" title="View Document" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 6: VERIFIED READY (Ration Card) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="ration card family tree aarav deshmukh food civil supplies" data-type="verified">
+<div class="bg-tertiary-fixed/30 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-tertiary-container font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>VERIFIED READY • FAMILY DETAILS RECORD</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 06: Child Limit &amp; Family Check</span>
+</div>
+<div class="p-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[26px]">groups</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary">Maharashtra Smart Ration Card</h2>
+<span class="font-body-md text-body-md text-on-surface mt-0.5">
+              Food &amp; Civil Supplies Dept • Head of Family: Ramesh Keshav Deshmukh
+            </span>
+<div class="flex flex-wrap items-center gap-space-md mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Card No: <strong class="text-on-surface">RC/PUN/298102</strong></span>
+<span>•</span>
+<span>Child Order: Child #1 (Eligible within 2-child norm)</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Norm Compliant
+          </span>
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant" onclick="alert('Viewing Ration Card record preview')" title="View Document" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Item 7: VERIFIED READY (Domicile Certificate Document Schema) -->
+<div class="finding-card bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col" data-search="domicile certificate age nationality certified tehsildar havelli pune" data-type="verified">
+<div class="bg-tertiary-fixed/30 px-space-md py-2 flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-tertiary-container font-label-md text-label-md font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>VERIFIED READY • CITIZENSHIP &amp; JURISDICTION</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Criterion 07: SDO Endorsement</span>
+</div>
+<div class="p-space-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-container flex-shrink-0">
+<span class="material-symbols-outlined text-[26px]">apartment</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary">Age, Nationality &amp; Domicile Certificate</h2>
+<span class="font-body-md text-body-md text-on-surface mt-0.5">
+              Issued by Executive Magistrate / Tahsildar Haveli, Pune District
+            </span>
+<div class="flex flex-wrap items-center gap-space-md mt-1 font-body-sm text-body-sm text-on-surface-variant">
+<span>Jurisdiction: Pune Urban</span>
+<span>•</span>
+<span>Format: MahaOnline Barcoded Form C</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-center">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-container font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Legally Valid
+          </span>
+<button class="p-2 rounded-lg hover:bg-surface-container transition-colors text-on-surface-variant" onclick="alert('Viewing Domicile Certificate copy')" title="View Document" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Guidance & Next Steps Roadmap (High-Impact Bento Layout) -->
+<div class="bg-primary-container text-on-primary rounded-xl p-space-lg mb-space-xl shadow-md relative overflow-hidden">
+<div class="absolute -right-20 -bottom-20 w-96 h-96 rounded-full bg-secondary/20 pointer-events-none blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex items-center gap-space-xs mb-space-xs text-secondary-fixed">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Candidate Action Plan</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-primary mb-space-md">
+        Recommended Preparation Roadmap Before Official Submission
+      </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Step 1 -->
+<div class="bg-surface-container-lowest/10 backdrop-blur-sm p-space-md rounded-xl flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold flex items-center justify-center">1</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">rule_folder</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-primary mb-1">Resolve 2 Flagged Items</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
+              Obtain the Tahsildar Income Certificate and prepare college name-inconsistency self-declaration.
+            </p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-container-lowest/10 backdrop-blur-sm p-space-md rounded-xl flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold flex items-center justify-center">2</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">support_agent</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-primary mb-1">Nodal Officer Pre-Check</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
+              Present this printed audit dossier to your college Scholarship Clerk / Nodal Desk at COEP for clearance.
+            </p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-container-lowest/10 backdrop-blur-sm p-space-md rounded-xl flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold flex items-center justify-center">3</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">compress</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-primary mb-1">Enforce MahaDBT Specs</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
+              Ensure all files are color scanned PDFs between 100 KB and 256 KB before uploading to official servers.
+            </p>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="bg-surface-container-lowest/10 backdrop-blur-sm p-space-md rounded-xl flex flex-col justify-between">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-7 h-7 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md font-bold flex items-center justify-center">4</span>
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">open_in_new</span>
+</div>
+<div>
+<h3 class="font-label-lg text-label-lg text-on-primary mb-1">Final Submission</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-relaxed">
+              Log in to <strong class="text-secondary-fixed">mahadbt.maharashtra.gov.in</strong> and submit before the FY scheme cutoff.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Strict Statutory Non-Governmental Disclaimer Box (Level 4 Non-Governmental Disclaimer) -->
+<div class="bg-surface-container-low p-space-md rounded-xl mb-space-lg flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0 text-on-surface-variant">
+<span class="material-symbols-outlined text-[22px]">gavel</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider font-semibold">Important Statutory Notice</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+<strong>MahaScholar Guard</strong> is an independent document preparation and schema readiness audit assistant developed strictly for educational facilitation. It does not possess governmental authority to approve, sanction, process, or reject official scholarship schemes. Scholarship allocation and monetary disbursement remain under the sole constitutional and statutory jurisdiction of the Government of Maharashtra and relevant department scrutiny officers via the official portal at <em>mahadbt.maharashtra.gov.in</em>.
+      </p>
+</div>
+</div>
+<!-- Sticky / Bottom Page Action Bar -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<a class="flex-1 sm:flex-none flex items-center justify-center gap-1 px-space-md py-2.5 rounded-lg bg-surface-container text-on-surface font-label-md text-label-md hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Back to Document Review</span>
+</a>
+<span class="hidden md:inline text-on-surface-variant font-label-sm text-label-sm">Prep ID: MSG-2025-0842</span>
+</div>
+<div class="flex items-center gap-space-sm w-full sm:w-auto">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-space-xs px-space-md py-2.5 rounded-lg bg-secondary text-on-secondary font-label-md text-label-md hover:bg-on-secondary-fixed-variant transition-colors shadow-sm" onclick="window.print()" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download Full Advisory Dossier (PDF)</span>
+</button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-space-xs px-space-md py-2.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary transition-colors shadow-sm" onclick="alert('Audit state successfully saved to your MahaScholar Guard profile dashboard.')" type="button">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Finish &amp; Save to Dashboard</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Interactive Client-side Script for Filtering & Search -->
+<script>
+  (function() {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const findingCards = document.querySelectorAll('.finding-card');
+    const searchInput = document.getElementById('finding-search');
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function updateVisibility() {
+      findingCards.forEach(card => {
+        const type = card.getAttribute('data-type');
+        const searchPool = card.getAttribute('data-search') || '';
+        
+        const matchesFilter = (currentFilter === 'all') || (type === currentFilter);
+        const matchesSearch = searchQuery === '' || searchPool.toLowerCase().includes(searchQuery.toLowerCase()) || card.innerText.toLowerCase().includes(searchQuery.toLowerCase());
+
+        if (matchesFilter && matchesSearch) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => {
+          t.classList.remove('bg-primary-container', 'text-on-primary');
+          t.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        tab.classList.remove('bg-surface-container', 'text-on-surface-variant');
+        tab.classList.add('bg-primary-container', 'text-on-primary');
+
+        currentFilter = tab.getAttribute('data-filter');
+        updateVisibility();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value.trim();
+        updateVisibility();
+      });
+    }
+
+    const downloadBtn = document.getElementById('btn-download-pdf');
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', () => {
+        window.print();
+      });
+    }
+  })();
+</script></div></main><footer class="w-full bg-surface-container-low shadow-[0_-1px_6px_rgba(0,0,0,0.03)] mt-auto"><div class="max-w-[1280px] mx-auto px-margin py-space-xl flex flex-col gap-space-lg"><div class="bg-surface-container-highest p-space-md rounded-xl flex items-start gap-space-md"><span class="material-symbols-outlined text-secondary text-[24px] mt-0.5">shield_with_heart</span><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg text-on-surface">Statutory &amp; Advisory Disclaimer</span><p class="font-body-sm text-body-sm text-on-surface-variant">MahaScholar Guard is an independent preparation assistant, not affiliated with or endorsed by MahaDBT or any government department. Does not grant approvals or guarantee scholarships. All status ratings denote personal readiness heuristics prior to official submission on mahadbt.maharashtra.gov.in.</p></div></div><div class="flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-md"><span class="font-label-md text-label-md text-on-surface">© 2025 MahaScholar Guard</span><span>•</span><span>Pune University Guidance Chapter</span></div><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Privacy Directive</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Document Safety Standard</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">MahaDBT Official Portal Link</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Support Desk</a></div></div></div></footer></body></html>

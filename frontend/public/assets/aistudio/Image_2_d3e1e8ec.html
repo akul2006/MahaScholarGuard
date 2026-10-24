@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><title>MahaScholar Guard</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#394761","tertiary-fixed-dim":"#6bd8cb","inverse-primary":"#b8c7e6","on-error":"#ffffff","surface-container-high":"#e6e8ea","on-surface":"#191c1e","outline-variant":"#c5c6ce","on-error-container":"#93000a","on-surface-variant":"#44474d","primary-container":"#0f1e36","error":"#ba1a1a","surface":"#f7f9fb","on-secondary-container":"#00217a","on-tertiary-container":"#13968a","surface-container":"#eceef0","on-primary-container":"#7886a3","on-secondary-fixed-variant":"#173bab","surface-tint":"#515f7a","secondary-fixed":"#dde1ff","secondary-fixed-dim":"#b8c4ff","secondary":"#3755c3","on-tertiary":"#ffffff","primary":"#000412","background":"#f7f9fb","tertiary-container":"#00231f","on-tertiary-fixed-variant":"#005049","on-primary":"#ffffff","tertiary":"#000605","primary-fixed":"#d7e3ff","on-tertiary-fixed":"#00201d","surface-container-low":"#f2f4f6","surface-container-lowest":"#ffffff","on-primary-fixed":"#0c1b33","on-secondary-fixed":"#001453","outline":"#75777e","secondary-container":"#708cfd","inverse-on-surface":"#eff1f3","surface-variant":"#e0e3e5","surface-bright":"#f7f9fb","error-container":"#ffdad6","on-background":"#191c1e","tertiary-fixed":"#89f5e7","surface-dim":"#d8dadc","surface-container-highest":"#e0e3e5","on-secondary":"#ffffff","primary-fixed-dim":"#b8c7e6","inverse-surface":"#2d3133"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"margin":"2rem","gutter":"1.5rem","space-sm":"0.5rem","space-xl":"2.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-md":"1rem","margin-mobile":"1rem","gutter-mobile":"1rem"},"fontFamily":{"label-lg":["Inter"],"body-md":["Inter"],"body-sm":["Inter"],"label-sm":["Inter"],"headline-sm":["Inter"],"headline-md":["Inter"],"label-md":["Inter"],"headline-xl-mobile":["Inter"],"headline-xl":["Inter"],"headline-lg":["Inter"],"headline-lg-mobile":["Inter"],"body-lg":["Inter"]},"fontSize":{"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.03em","fontWeight":"500"}],"headline-sm":["20px",{"lineHeight":"28px","fontWeight":"600"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl-mobile":["30px",{"lineHeight":"38px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-xl":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.015em","fontWeight":"600"}],"headline-lg-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/95 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-surface-container-low px-margin py-space-xs"><div class="max-w-[1280px] mx-auto flex items-center justify-between text-on-surface-variant"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span><span class="font-label-sm text-label-sm">Independent Advisory Tool • Non-governmental scholarship readiness checker for Maharashtra applicants</span></div><div class="flex items-center gap-space-md"><span class="font-label-sm text-label-sm text-on-surface-variant">Citizen Advisory Helpline: active</span><span class="h-3 w-px bg-outline-variant"></span><span class="font-label-sm text-label-sm text-secondary font-semibold">SPPU Intake 2024-25</span></div></div></div><div class="h-20 max-w-[1280px] mx-auto px-margin flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg flex-shrink-0"><div class="flex items-center gap-space-sm"><img alt="MahaScholar Guard Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UKIYbiGDKhP-WmUe5HFCrLfb1BXruGka4OeMVKMkxCoZHwKhtzDeBkn6jyIIOyFbTZkaXkMd4rc00re6FbzAIIP3p9DNPdyvom4BYxzvzbd6CRRdqn9KgCCmXXfCtqh-0zvMt_46PbnJyRA0wcMHFlc2qFkj8_vSwM_iGbPawap0ecc_T8zZjcjqKZa7yFM0XOXxKuzW5VRQDmIBdJxiLrZdeM6wskWZjDW3R5Vacz1_RRLxfcJnSmiyPB"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">MahaScholar Guard</span><span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-space-xs py-0.5 rounded">Beta</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">Document Readiness Assistant</span></div></div></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary font-bold rounded-lg"><a aria-current="page" class="px-space-sm py-2 transition-colors bg-primary-container text-on-primary font-bold rounded-lg" data-path="home" href="#">Home</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="dashboard" href="#">Dashboard</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="scheme-selection" href="#">Scheme Selection</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="upload-wizard" href="#">Upload Wizard</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="document-review" href="#">Document Review</a><a class="px-space-sm py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="readiness-report" href="#">Readiness Report</a></nav><div class="flex items-center gap-space-md flex-shrink-0"><button class="flex items-center gap-space-xs px-space-sm py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-sm text-label-sm focus:outline-none focus:ring-2 focus:ring-secondary" type="button"><span class="material-symbols-outlined text-[16px]">translate</span><span>English / मराठी</span></button><button aria-label="Notifications" class="relative p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-secondary" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-sm pl-space-xs py-1 rounded-lg"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgZUuzn0BvzF9TWOwkSGmgJ4lZbgDmtaCFWX_F3QXWAJuFaqKL-ZuRr67zKk3yq0LCWrobIfSyvJ1xsq-SeffZ0hghotUUOvF-qaEnbi1S4cDfJT7tWYv-f99kaOhTem9JTMJKRwpovJkYcLL_HvsLejJb3NsrwcsZjmvquA6hXSh05nfoFoDJUyRokm1pKG6Kqzg4UoAdFh-ymj4iwILeHQ0IMu_EHkWS9R7iiCTZkystxbnDNMgB0A"/><div class="flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Aarav Deshmukh (SPPU Pune)</span><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span><span class="font-label-sm text-label-sm text-on-surface-variant">FY B.Tech</span></div></div></div></div></div></header><main class="w-full pt-20 bg-background flex-1"><div class="max-w-[1280px] mx-auto px-margin py-space-lg"><div class="flex flex-col w-full">
+<!-- 1. Regulatory Banner -->
+<div class="w-full bg-surface-container-high rounded-xl p-space-md shadow-sm mb-space-lg">
+<div class="flex items-start md:items-center gap-space-md">
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 text-on-secondary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between w-full gap-space-sm">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Independent Citizen Advisory Tool</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            MahaScholar Guard is an independent document readiness assistant for Maharashtra students. It is <strong class="text-on-surface">NOT an official government portal (MahaDBT)</strong> and does not evaluate, approve applications, or guarantee scholarship disbursements.
+          </p>
+</div>
+<a class="shrink-0 flex items-center gap-space-xs px-space-md py-1.5 rounded-lg bg-surface-container-lowest text-secondary font-label-md text-label-md hover:bg-surface-container transition-all" href="https://mahadbt.maharashtra.gov.in" rel="noopener noreferrer" target="_blank">
+<span>Official MahaDBT</span>
+<span class="material-symbols-outlined text-[16px]">north_east</span>
+</a>
+</div>
+</div>
+</div>
+<!-- 2. Hero Section: Asymmetric Split Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center mb-space-xl">
+<!-- Left Hero Column -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<div class="inline-flex items-center gap-space-xs self-start px-space-sm py-1 rounded-full bg-surface-container text-secondary">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wide">Civic-Tech • Maharashtra Higher Education Support</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-primary font-bold tracking-tight">
+        Your Scholarship Papers.<br/>
+<span class="text-secondary">Audited &amp; Verified</span> Before Portal Upload.
+      </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+        Avoid last-minute scrutinies and rejected portal claims. Audit your Caste Validity, Tahsildar Income Slip, Domicile, and SSC/HSC marksheets against active Maharashtra state requirements in seconds.
+      </p>
+<!-- Primary Action Buttons -->
+<div class="flex flex-wrap items-center gap-space-md pt-space-xs">
+<a class="flex items-center gap-space-sm px-space-lg py-3 rounded-lg bg-primary-container text-on-primary font-label-lg text-label-lg hover:bg-secondary transition-all shadow-md group" href="#upload-wizard">
+<span>Check My Documents Now</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-lg py-3 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg hover:bg-surface-container-high transition-all" href="#how-it-works">
+<span class="material-symbols-outlined text-[18px] text-secondary">play_circle</span>
+<span>See Verification Walkthrough</span>
+</a>
+</div>
+<!-- Trust Badges Bar -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-sm pt-space-sm">
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]">verified</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">100% Free For All Students</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-secondary text-[18px]">lock_reset</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Ephemeral / Zero Data Retention</span>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">timer</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Audit Results in &lt; 90 Sec</span>
+</div>
+</div>
+</div>
+<!-- Right Hero Column: Interactive Simulation Card -->
+<div class="lg:col-span-5 relative">
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-lg shadow-xl relative overflow-hidden">
+<!-- Card Top Accents -->
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface uppercase font-bold tracking-wide">Live Audit Engine Demo</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container px-space-xs py-0.5 rounded text-on-surface-variant">SPPU / Pune Eng. Cluster</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-md mb-space-md">
+<div class="flex justify-between items-center mb-space-xs">
+<div>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">RJC-Shahu Scheme</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Candidate: Aarav Suresh Deshmukh</p>
+</div>
+<!-- Score Ring Mini SVG -->
+<div class="relative w-14 h-14 flex items-center justify-center">
+<svg class="w-14 h-14 transform -rotate-90" viewbox="0 0 36 36">
+<path class="text-surface-container-high" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="78, 100" stroke-linecap="round" stroke-width="3.5"></path>
+</svg>
+<span class="absolute font-label-md text-label-md font-bold text-primary">78%</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">2 Critical Action Items Require Attention</span>
+</div>
+</div>
+<!-- Document Checks List -->
+<div class="space-y-space-xs">
+<!-- Item 1: Domicile -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px]">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface leading-tight">Maharashtra Domicile Certificate</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tahsildar Haveli • Barcode Validated</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-container text-on-tertiary-container font-semibold">Ready</span>
+</div>
+<!-- Item 2: Income -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-on-tertiary-container text-[20px]">check_circle</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface leading-tight">Income Certificate FY 2023-24</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Annual INR 1,80,000 • Valid till 31 Mar 2025</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-container text-on-tertiary-container font-semibold">Valid</span>
+</div>
+<!-- Item 3: Marksheet Name Mismatch -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-high">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">error</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface leading-tight">HSC Class 12 Marksheet</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Name reads "Deshmukh Aarav S." vs Aadhaar format</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-surface-container text-secondary font-semibold">Review</span>
+</div>
+<!-- Item 4: Caste Validity -->
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-error-container">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-error text-[20px]">cancel</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-error-container leading-tight">Caste Validity Certificate</span>
+<span class="font-label-sm text-label-sm text-on-error-container">Missing. Mandatory for Reserved Category</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded-full bg-on-error text-error font-bold">Missing</span>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-sm rounded-lg flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Simulated preliminary check output</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Export Fix Guide (PDF)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Visual Break / Image Banner with Civic College Ambience -->
+<section class="w-full relative rounded-xl overflow-hidden shadow-md mb-space-xl">
+<div class="bg-cover bg-center w-full h-56 flex items-center justify-center" data-alt="A bright, modern college campus hallway in Pune, Maharashtra with ambitious university students discussing study documents near library notice boards, clean sunlight, soft architectural tones of navy, cream and stone, documentary civic style" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDzzpvz24MiWVU0F13A5zvsPhUh2AV2wmbUJgJpdGh5Jr8HR7--WyFRqJ1Jvjo3kkm8HLwqE_76fXuS2maGZTZizw9Hd7ylSgcrVjAK7Zf5gy7j0NqRcDe2_uoHD67E3dT-uOQXQet6Vx0w4RuEc3h0H1Ouj5gu_zAwhepv85A1SF35e32rjsamFzpQLgxC1KlB9GAB8xDPEp_ZGVWPmjV-EBSHQaZI3Dn2oUxpwVlK1lboTbyS8bBLrA')">
+<div class="w-full h-full bg-primary-container/85 p-space-lg flex flex-col justify-center items-start text-on-primary">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary-container">Over 48,000 Application Rejections Annually in Maharashtra</span>
+<h2 class="font-headline-md text-headline-md font-bold mt-space-xs mb-space-xs">Simple Name Spelling Inconsistencies Delay Education Grants for Months</h2>
+<p class="font-body-md text-body-md text-inverse-primary max-w-3xl">MahaScholar Guard standardizes your document readiness portfolio so your college scholarship clerk can sanction your file on the first scrutiny round.</p>
+</div>
+</div>
+</section>
+<!-- 3. Core Trust Pillars: Why Pre-Check Matters -->
+<section class="mb-space-xl">
+<div class="flex flex-col mb-space-md">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Proactive Verification Methodology</span>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Why Verification Prior to MahaDBT Submission Is Critical</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Aaple Sarkar Seva Kendras and college administration clerks reject over 30% of freshman folders for minor clerical anomalies. Our offline-ready engine pinpoints them instantly.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Pillar 1 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-md flex flex-col justify-between hover:shadow-xl transition-shadow">
+<div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[28px]">search_check</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Gap Detection</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mt-space-xs mb-space-xs">Detect Missing Mandatories</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Scheme requirements differ sharply between EBC, SC/ST, and OBC schemes. We run deterministic checklist logic to ensure you do not omit crucial forms like Non-Creamy Layer or Caste Validity.</p>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-xs rounded font-label-sm text-label-sm text-on-surface">
+          Includes latest 2024-25 GR rules
+        </div>
+</div>
+<!-- Pillar 2 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-md flex flex-col justify-between hover:shadow-xl transition-shadow">
+<div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-secondary mb-space-md">
+<span class="material-symbols-outlined text-[28px]">spellcheck</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Discrepancy Flags</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mt-space-xs mb-space-xs">Detect Name &amp; Date Discrepancies</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Flags minor naming variations between your 10th Board Certificate, Aadhaar Card, and Bank Passbook (e.g., father's middle name spelling or Marathi transliteration errors) before submission.</p>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-xs rounded font-label-sm text-label-sm text-on-surface">
+          Includes Gazette Affidavit format guidance
+        </div>
+</div>
+<!-- Pillar 3 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-md flex flex-col justify-between hover:shadow-xl transition-shadow">
+<div>
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-on-tertiary-container mb-space-md">
+<span class="material-symbols-outlined text-[28px]">description</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Actionable PDF Checklists</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mt-space-xs mb-space-xs">Download College Ready dossier</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Generate a clean, printable single-page Document Health Slip with flagged remediation tasks to carry straight to your college scholarship desk or local Setu Kendra.</p>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low p-space-xs rounded font-label-sm text-label-sm text-on-surface">
+          Free PDF remediation sheet
+        </div>
+</div>
+</div>
+</section>
+<!-- 4. How It Works (Four Step Sequential Grid) -->
+<section class="mb-space-xl bg-surface-container-low p-space-lg rounded-xl shadow-sm" id="how-it-works">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-sm">
+<div>
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Step-by-Step Guidance</span>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold">How MahaScholar Guard Prepares Your Dossier</h2>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Estimated completion time: 2 Minutes</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Step 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center font-label-md text-label-md">01</span>
+<span class="material-symbols-outlined text-secondary">list_alt</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mb-space-xs">Select Scheme</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Choose your targeted scheme (e.g. Rajarshi Shahu Maharaj Tuition Fee Freeship, Post-Matric OBC/SC/ST, or Minority Fellowship).</p>
+</div>
+<div class="pt-space-md font-label-sm text-label-sm text-secondary font-medium">Over 24 State Schemes</div>
+</div>
+<!-- Step 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center font-label-md text-label-md">02</span>
+<span class="material-symbols-outlined text-secondary">cloud_upload</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mb-space-xs">Upload Docs Securely</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Drag and drop PDFs or photos of certificates. All files are inspected in-memory with local encryption and zero database retention.</p>
+</div>
+<div class="pt-space-md font-label-sm text-label-sm text-secondary font-medium">Client-side OCR processing</div>
+</div>
+<!-- Step 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center font-label-md text-label-md">03</span>
+<span class="material-symbols-outlined text-secondary">fact_check</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mb-space-xs">Review Extracted Data</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Verify parsed student name, income figures, issuance dates, issuing officers (Tahsildar/Sub-Divisional Magistrate), and barcodes.</p>
+</div>
+<div class="pt-space-md font-label-sm text-label-sm text-secondary font-medium">Bilingual Marathi/English view</div>
+</div>
+<!-- Step 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-8 h-8 rounded-full bg-primary-container text-on-primary font-bold flex items-center justify-center font-label-md text-label-md">04</span>
+<span class="material-symbols-outlined text-secondary">assignment_turned_in</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-semibold mb-space-xs">Get Action Report</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Receive your overall Readiness Grade (Ready, Caution, or Incomplete) along with actionable fixes before visiting MahaDBT portal.</p>
+</div>
+<div class="pt-space-md font-label-sm text-label-sm text-secondary font-medium">Instant PDF Download</div>
+</div>
+</div>
+</section>
+<!-- 5. Supported Schemes & State Departments Matrix -->
+<section class="mb-space-xl">
+<div class="flex flex-col mb-space-md">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Eligibility &amp; Department Coverage</span>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Supported Maharashtra Scholarship Frameworks</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Document criteria rules are mapped against current regulations from major Maharashtra administrative directorates.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Dept 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-xs text-secondary">
+<span class="material-symbols-outlined text-[20px]">school</span>
+<span class="font-label-md text-label-md font-bold">Higher &amp; Technical Ed</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">DTE / DHE Maharashtra programs including Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Yojna.</p>
+<div class="space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Income Cap: &lt;= 8 Lakhs</div>
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Domicile: Mandatory</div>
+</div>
+</div>
+<!-- Dept 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-xs text-secondary">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+<span class="font-label-md text-label-md font-bold">Social Justice &amp; Assistance</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">Post-Matric Scholarship for SC and Navabuddha students, maintenance allowance for professional institutions.</p>
+<div class="space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Caste Validity: Mandatory</div>
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Form 16 / Income Proof</div>
+</div>
+</div>
+<!-- Dept 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-xs text-secondary">
+<span class="material-symbols-outlined text-[20px]">nature_people</span>
+<span class="font-label-md text-label-md font-bold">Tribal Development Dept</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">Post-Matric Scholarship Scheme (Government of India) &amp; Tuition and Examination Fee Waiver for ST students.</p>
+<div class="space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Tribe Certificate &amp; Scrutiny</div>
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Hosteller Allowance Audit</div>
+</div>
+</div>
+<!-- Dept 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs mb-space-xs text-secondary">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-label-md text-label-md font-bold">VJNT, OBC &amp; SBC Welfare</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">Post Matric Scholarship for OBC/VJNT/SBC students, including Non-Creamy Layer document validation algorithms.</p>
+<div class="space-y-1">
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Non-Creamy Layer Validity Check</div>
+<div class="font-label-sm text-label-sm text-on-surface bg-surface-container-low px-space-xs py-1 rounded">• Ration Card / Family Tree Check</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Document Preview & Photo Callout -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-space-xl items-center">
+<div class="lg:col-span-5 flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Field Level Precision</span>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Smart Analysis of Official Maharashtra Certificates</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Our scanner recognizes typical seal placements, 16-digit barcoded certificate IDs from MahaOnline, Tahsil signatures, and validity date formats from all 36 districts of Maharashtra.</p>
+<div class="space-y-space-xs mt-space-sm">
+<div class="flex items-start gap-space-sm bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container mt-0.5">task_alt</span>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Validates 1-Year vs 3-Year Income Certificate Rules</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Detects whether your certificate covers the mandatory preceding financial year or has expired.</p>
+</div>
+</div>
+<div class="flex items-start gap-space-sm bg-surface-container-lowest p-space-sm rounded-lg shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container mt-0.5">task_alt</span>
+<div>
+<span class="font-label-md text-label-md text-on-surface">Cross-checks Aadhaar Seeded Bank Account Status</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Reminds you to confirm NPCI mapping before relying on DBT scholarship payouts.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-7">
+<div class="w-full bg-surface-container-lowest rounded-xl p-space-lg shadow-md">
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary">visibility</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">Tahsildar Certificate Inspection Sample</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sample: Haveli, Pune</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-md grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div class="space-y-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Parsed Certificate Holder</span>
+<div class="font-label-md text-label-md text-on-surface bg-surface-container-lowest p-space-xs rounded">Deshmukh Aarav Suresh</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Annual Family Income</span>
+<div class="font-label-md text-label-md text-on-surface bg-surface-container-lowest p-space-xs rounded font-mono">₹ 1,80,000 /- (One Lakh Eighty Thousand)</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Issuing Authority</span>
+<div class="font-label-md text-label-md text-on-surface bg-surface-container-lowest p-space-xs rounded">Tahsildar Haveli, Pune District</div>
+</div>
+<div class="space-y-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Application Barcode ID</span>
+<div class="font-label-md text-label-md text-on-surface bg-surface-container-lowest p-space-xs rounded font-mono">MH-PUN-2023-98214</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Financial Validity Range</span>
+<div class="font-label-md text-label-md text-on-tertiary-container bg-surface-container-lowest p-space-xs rounded font-semibold">Valid through 31-03-2025 (Active)</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">MahaDBT Eligibility Status</span>
+<div class="font-label-md text-label-md text-secondary bg-surface-container-lowest p-space-xs rounded font-semibold">Under EBC / Freeship Threshold (&lt; 8L)</div>
+</div>
+</div>
+<div class="mt-space-md flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span class="font-body-sm text-body-sm">Matches standard Aaple Sarkar digital signature stamp formats.</span>
+</div>
+<button class="px-space-md py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm">
+            View Certificate Rules
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 6. Frequently Asked Questions (Accordion) -->
+<section class="mb-space-xl">
+<div class="flex flex-col mb-space-md">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary">Common Inquiries</span>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold">Frequently Asked Questions</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Clear answers regarding data privacy, regulatory positioning, and document remediation.</p>
+</div>
+<div class="space-y-space-sm max-w-4xl">
+<!-- FAQ 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all" id="faq-1">
+<button class="w-full flex items-center justify-between text-left focus:outline-none" onclick="toggleFaq('faq-ans-1', 'faq-icon-1')">
+<span class="font-headline-sm text-headline-sm text-primary font-medium">Does MahaScholar Guard submit my application to MahaDBT or colleges?</span>
+<span class="material-symbols-outlined text-secondary transition-transform" id="faq-icon-1">expand_more</span>
+</button>
+<div class="pt-space-sm text-on-surface-variant font-body-md text-body-md" id="faq-ans-1">
+<p><strong>No.</strong> MahaScholar Guard is solely a pre-submission advisory tool. It does not interface directly with the MahaDBT servers to submit or alter official applications. You must always upload your verified documents independently on the official government website (mahadbt.maharashtra.gov.in) before the official departmental deadlines.</p>
+</div>
+</div>
+<!-- FAQ 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all" id="faq-2">
+<button class="w-full flex items-center justify-between text-left focus:outline-none" onclick="toggleFaq('faq-ans-2', 'faq-icon-2')">
+<span class="font-headline-sm text-headline-sm text-primary font-medium">Are my sensitive documents stored or logged on public servers?</span>
+<span class="material-symbols-outlined text-secondary transition-transform" id="faq-icon-2">expand_more</span>
+</button>
+<div class="hidden pt-space-sm text-on-surface-variant font-body-md text-body-md" id="faq-ans-2">
+<p><strong>Never.</strong> MahaScholar Guard uses a zero-retention architecture. Your documents are inspected temporarily in browser memory or stateless isolated sessions for OCR/heuristic analysis. Once your session ends or you download your audit report, uploaded files are completely destroyed.</p>
+</div>
+</div>
+<!-- FAQ 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all" id="faq-3">
+<button class="w-full flex items-center justify-between text-left focus:outline-none" onclick="toggleFaq('faq-ans-3', 'faq-icon-3')">
+<span class="font-headline-sm text-headline-sm text-primary font-medium">What if my name differs slightly between my Aadhaar and Marksheet?</span>
+<span class="material-symbols-outlined text-secondary transition-transform" id="faq-icon-3">expand_more</span>
+</button>
+<div class="hidden pt-space-sm text-on-surface-variant font-body-md text-body-md" id="faq-ans-3">
+<p>Minor spelling variations or differences in the order of initials (e.g., Surname first vs. First name first) are among the most common reasons for scrutiny hold-ups at the college level. MahaScholar Guard flags these differences and generates the standard Maharashtra Government Affidavit template format required to resolve discrepancies.</p>
+</div>
+</div>
+<!-- FAQ 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm transition-all" id="faq-4">
+<button class="w-full flex items-center justify-between text-left focus:outline-none" onclick="toggleFaq('faq-ans-4', 'faq-icon-4')">
+<span class="font-headline-sm text-headline-sm text-primary font-medium">Is this service really free for college students?</span>
+<span class="material-symbols-outlined text-secondary transition-transform" id="faq-icon-4">expand_more</span>
+</button>
+<div class="hidden pt-space-sm text-on-surface-variant font-body-md text-body-md" id="faq-ans-4">
+<p>Yes. MahaScholar Guard operates as an open-access civic-tech guidance resource developed to reduce clerical barriers for economically backward, reserved category, and first-generation college students across Maharashtra.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. Bottom Action CTA -->
+<section class="w-full bg-primary-container text-on-primary rounded-xl p-space-xl shadow-xl mb-space-lg relative overflow-hidden">
+<div class="max-w-2xl flex flex-col gap-space-sm relative z-10">
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary-container">Start Your 2-Minute Audit</span>
+<h2 class="font-headline-lg text-headline-lg font-bold">Check Your Scholarship Dossier Before You Submit to MahaDBT</h2>
+<p class="font-body-md text-body-md text-inverse-primary">Don't risk waiting months for clerical corrections. Validate all required certificates, names, and validity dates right now in private.</p>
+<div class="flex flex-wrap items-center gap-space-md pt-space-sm">
+<a class="flex items-center gap-space-sm px-space-lg py-3 rounded-lg bg-secondary text-on-secondary font-label-lg text-label-lg hover:bg-on-secondary-fixed-variant transition-all shadow-md" href="#upload-wizard">
+<span>Launch Readiness Assistant</span>
+<span class="material-symbols-outlined text-[18px]">rocket_launch</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-md py-3 rounded-lg bg-surface-container-high/20 text-on-primary hover:bg-surface-container-high/30 transition-all font-label-md text-label-md" href="#scheme-selection">
+<span>Browse 24 Scheme Checklists</span>
+</a>
+</div>
+</div>
+<!-- Subtle Background Graphic Accent -->
+<div class="absolute -right-12 -bottom-12 w-64 h-64 rounded-full bg-secondary/20 blur-3xl pointer-events-none"></div>
+</section>
+</div>
+<!-- Simple Accordion Vanilla Script -->
+<script>
+  function toggleFaq(answerId, iconId) {
+    const ans = document.getElementById(answerId);
+    const icon = document.getElementById(iconId);
+    if (ans.classList.contains('hidden')) {
+      ans.classList.remove('hidden');
+      icon.classList.add('rotate-180');
+    } else {
+      ans.classList.add('hidden');
+      icon.classList.remove('rotate-180');
+    }
+  }
+</script></div></main><footer class="w-full bg-surface-container-low shadow-[0_-1px_6px_rgba(0,0,0,0.03)] mt-auto"><div class="max-w-[1280px] mx-auto px-margin py-space-xl flex flex-col gap-space-lg"><div class="bg-surface-container-highest p-space-md rounded-xl flex items-start gap-space-md"><span class="material-symbols-outlined text-secondary text-[24px] mt-0.5">shield_with_heart</span><div class="flex flex-col gap-space-xs"><span class="font-label-lg text-label-lg text-on-surface">Statutory &amp; Advisory Disclaimer</span><p class="font-body-sm text-body-sm text-on-surface-variant">MahaScholar Guard is an independent preparation assistant, not affiliated with or endorsed by MahaDBT or any government department. Does not grant approvals or guarantee scholarships. All status ratings denote personal readiness heuristics prior to official submission on mahadbt.maharashtra.gov.in.</p></div></div><div class="flex flex-col md:flex-row items-center justify-between gap-space-md font-body-sm text-body-sm text-on-surface-variant"><div class="flex items-center gap-space-md"><span class="font-label-md text-label-md text-on-surface">© 2025 MahaScholar Guard</span><span>•</span><span>Pune University Guidance Chapter</span></div><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Privacy Directive</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Document Safety Standard</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">MahaDBT Official Portal Link</a><a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Support Desk</a></div></div></div></footer></body></html>

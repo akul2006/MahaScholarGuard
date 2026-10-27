@@ -22,6 +22,7 @@ export interface ExtractedField {
   labelMr: string;
   value: string;
   sourceDoc: string;
+  sourceDocCode?: string;
   status: 'clean' | 'mismatch' | 'unverified';
   note?: string;
   suggestedValue?: string;
@@ -67,6 +68,7 @@ export interface UploadedDocRecord {
   isSimulated: boolean;
   status: 'ready' | 'flagged' | 'invalid';
   customNotes?: string;
+  file?: File;
 }
 
 export interface FindingItem {
@@ -79,6 +81,7 @@ export interface FindingItem {
   flagReasonEn: string;
   remediationActionEn: string;
   searchPool: string;
+  docCode?: string;
   docA?: {
     title: string;
     value: string;

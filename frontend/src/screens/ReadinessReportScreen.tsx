@@ -8,6 +8,7 @@ interface ReadinessReportScreenProps {
   reportData: AuditReportData;
   onUpdateReportData: (updated: AuditReportData) => void;
   onOpenEditRecordModal: (findingId: string) => void;
+  onFastTrackUpload?: (docCode: string, file: File) => void;
 }
 
 export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
@@ -16,6 +17,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
   reportData,
   onUpdateReportData,
   onOpenEditRecordModal,
+  onFastTrackUpload,
 }) => {
   const [activeFilter, setActiveFilter] = useState<'all' | FindingStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -23,37 +25,40 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
   const [shareToast, setShareToast] = useState(false);
   const [saveSuccessToast, setSaveSuccessToast] = useState(false);
 
-  // Fast-track mock upload for missing income certificate
-  const handleFastTrackIncomeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Fast-track upload for missing certificates
+  const handleFastTrackFileChange = (docCode: string, e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      // Update report findings: convert missing to verified
-      const updatedFindings = reportData.findings.map((f) => {
-        if (f.id === 'f-1') {
-          return {
-            ...f,
-            type: 'verified' as FindingStatus,
-            badgeLabel: 'Uploaded & Valid',
-            flagReasonEn: `Uploaded "${file.name}" (${(file.size / 1024).toFixed(1)} KB). Tahsildar digital signature format verified for FY 2023-24.`,
-            remediationActionEn: 'Document successfully cleared for MahaDBT submission.',
-          };
-        }
-        return f;
-      });
+      if (onFastTrackUpload) {
+        onFastTrackUpload(docCode, file);
+      } else {
+        const updatedFindings = reportData.findings.map((f) => {
+          if (f.docCode === docCode || f.id === 'f-1') {
+            return {
+              ...f,
+              type: 'verified' as FindingStatus,
+              badgeLabel: 'Uploaded & Valid',
+              flagReasonEn: `Uploaded "${file.name}" (${(file.size / 1024).toFixed(1)} KB). Format verified for submission.`,
+              remediationActionEn: 'Document successfully cleared for MahaDBT submission.',
+            };
+          }
+          return f;
+        });
 
-      const newVerified = updatedFindings.filter((f) => f.type === 'verified').length;
-      const newReview = updatedFindings.filter((f) => f.type === 'review').length;
-      const newMissing = updatedFindings.filter((f) => f.type === 'missing').length;
-      const newScore = Math.min(100, Math.round(((newVerified + newReview * 0.5) / updatedFindings.length) * 100));
+        const newVerified = updatedFindings.filter((f) => f.type === 'verified').length;
+        const newReview = updatedFindings.filter((f) => f.type === 'review').length;
+        const newMissing = updatedFindings.filter((f) => f.type === 'missing').length;
+        const newScore = Math.min(100, Math.round(((newVerified + newReview * 0.5) / updatedFindings.length) * 100));
 
-      onUpdateReportData({
-        ...reportData,
-        findings: updatedFindings,
-        verifiedCount: newVerified,
-        reviewCount: newReview,
-        missingCount: newMissing,
-        overallReadiness: newScore,
-      });
+        onUpdateReportData({
+          ...reportData,
+          findings: updatedFindings,
+          verifiedCount: newVerified,
+          reviewCount: newReview,
+          missingCount: newMissing,
+          overallReadiness: newScore,
+        });
+      }
     }
   };
 
@@ -314,7 +319,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           </div>
           <div className="mt-4">
             <div className="flex items-center gap-1 mb-2">
-              {Array.from({ length: 4 }).map((_, i) => (
+              {Array.from({ length: Math.max(1, reportData.findings.length) }).map((_, i) => (
                 <span
                   key={i}
                   className={`h-1.5 flex-1 rounded-full ${
@@ -324,7 +329,9 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               ))}
             </div>
             <p className="font-body-sm text-body-sm text-[#44474d]">
-              Domicile, Fee Receipt, Ration Card &amp; Aadhaar Card pass schema heuristics.
+              {reportData.verifiedCount > 0
+                ? `${reportData.verifiedCount} of ${reportData.findings.length} criteria cleared for ${reportData.schemeNameEn}.`
+                : 'No documents verified yet. Upload required scheme documents.'}
             </p>
           </div>
           <div className="mt-1">
@@ -351,12 +358,15 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           </div>
           <div className="mt-3">
             <div className="bg-[#f2f4f6] px-2 py-1.5 rounded text-[#44474d] font-body-sm text-body-sm space-y-1">
-              <div className="flex items-center gap-1 font-semibold text-[#000412]">
-                <span className="w-2 h-2 rounded-full bg-[#3755c3]"></span> Name match variation
-              </div>
-              <div className="flex items-center gap-1 font-semibold text-[#000412]">
-                <span className="w-2 h-2 rounded-full bg-[#3755c3]"></span> Barcode validity query
-              </div>
+              {reportData.findings.filter((f) => f.type === 'review').slice(0, 2).map((f) => (
+                <div key={f.id} className="flex items-center gap-1 font-semibold text-[#000412] truncate">
+                  <span className="w-2 h-2 rounded-full bg-[#3755c3] shrink-0"></span>
+                  <span className="truncate">{f.titleEn}</span>
+                </div>
+              ))}
+              {reportData.reviewCount === 0 && (
+                <div className="text-xs text-[#13968a]">No pending review items</div>
+              )}
             </div>
           </div>
           <div className="mt-1">
@@ -383,17 +393,22 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           </div>
           <div className="mt-3">
             <div className="bg-[#ffdad6]/40 p-2 rounded text-[#191c1e]">
-              <span className="font-label-md text-label-md text-[#ba1a1a] block font-semibold">
-                {reportData.missingCount > 0 ? 'Income Certificate' : 'None Missing'}
+              <span className="font-label-md text-label-md text-[#ba1a1a] block font-semibold truncate">
+                {reportData.missingCount > 0
+                  ? reportData.findings.find((f) => f.type === 'missing')?.titleEn || 'Missing Required'
+                  : 'All Mandatory Attached'}
               </span>
-              <span className="font-body-sm text-body-sm text-[#44474d]">
-                {reportData.missingCount > 0 ? 'Tahsildar certified for FY 24-25 pending' : 'All required certificates attached'}
+              <span className="font-body-sm text-body-sm text-[#44474d] text-xs">
+                {reportData.missingCount > 0
+                  ? `${reportData.missingCount} mandatory certificate(s) pending`
+                  : 'All required scheme certificates attached'}
               </span>
             </div>
           </div>
           <div className="mt-1">
             <span className="font-label-sm text-label-sm text-[#ba1a1a] font-semibold flex items-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">priority_high</span> Mandatory for EBC benefit
+              <span className="material-symbols-outlined text-[14px]">priority_high</span>{' '}
+              {reportData.missingCount > 0 ? 'Mandatory for scheme approval' : 'Ready for submission'}
             </span>
           </div>
         </div>
@@ -519,15 +534,15 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                       <span className="material-symbols-outlined text-[#3755c3] text-[32px]">
                         upload_file
                       </span>
-                      <span className="font-label-md text-label-md text-[#000412] mt-1 font-semibold">
-                        Select Income PDF
+                      <span className="font-label-md text-label-md text-[#000412] mt-1 font-semibold truncate max-w-[200px]">
+                        Select {finding.titleEn}
                       </span>
-                      <span className="font-body-sm text-body-sm text-[#44474d]">PDF, Max 256 KB</span>
+                      <span className="font-body-sm text-body-sm text-[#44474d]">PDF/Image, Max 256 KB</span>
                       <input
                         type="file"
-                        accept=".pdf"
+                        accept=".pdf,.jpg,.jpeg,.png"
                         className="hidden"
-                        onChange={handleFastTrackIncomeUpload}
+                        onChange={(e) => handleFastTrackFileChange(finding.docCode || 'INCOME_CERT', e)}
                       />
                     </label>
 
@@ -535,9 +550,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                       onClick={() => {
                         const input = document.createElement('input');
                         input.type = 'file';
-                        input.accept = '.pdf';
+                        input.accept = '.pdf,.jpg,.jpeg,.png';
                         input.onchange = (e) =>
-                          handleFastTrackIncomeUpload(
+                          handleFastTrackFileChange(
+                            finding.docCode || 'INCOME_CERT',
                             e as unknown as React.ChangeEvent<HTMLInputElement>
                           );
                         input.click();
@@ -546,7 +562,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                       type="button"
                     >
                       <span className="material-symbols-outlined text-[16px]">cloud_upload</span>
-                      <span>Upload Income Certificate Now</span>
+                      <span>Upload {finding.titleEn}</span>
                     </button>
                   </div>
                 </div>
@@ -555,7 +571,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           }
 
           if (finding.type === 'review') {
-            const isNameCheck = finding.id === 'f-2';
+            const isNameCheck = Boolean(finding.docA && finding.docB);
             return (
               <div
                 key={finding.id}
@@ -723,7 +739,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                   )}
 
                   {/* Barcode action module for Finding 3 */}
-                  {!isNameCheck && (
+                  {!isNameCheck && finding.barcodeConfirmed !== undefined && (
                     <div className="w-full lg:w-72 bg-[#f2f4f6] p-4 rounded-xl flex flex-col gap-2 shrink-0 border border-[#c5c6ce] no-print">
                       <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
                         Aaple Sarkar Scan
@@ -784,13 +800,19 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-[#89f5e7] flex items-center justify-center text-[#13968a] shrink-0">
                     <span className="material-symbols-outlined text-[26px]">
-                      {finding.id === 'f-4'
+                      {finding.docCode === 'HSC_MARKSHEET'
                         ? 'school'
-                        : finding.id === 'f-5'
+                        : finding.docCode === 'AADHAAR_CARD' || finding.id === 'f-5'
                         ? 'account_balance_wallet'
-                        : finding.id === 'f-6'
+                        : finding.docCode === 'RATION_CARD' || finding.id === 'f-6'
                         ? 'groups'
-                        : 'apartment'}
+                        : finding.docCode === 'COLLEGE_BONAFIDE' || finding.id === 'f-4'
+                        ? 'apartment'
+                        : finding.docCode === 'DOMICILE_CERT' || finding.id === 'f-7'
+                        ? 'home_pin'
+                        : finding.docCode === 'INCOME_CERT'
+                        ? 'payments'
+                        : 'task_alt'}
                     </span>
                   </div>
                   <div className="flex flex-col">
@@ -848,10 +870,14 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </div>
               <div>
                 <h3 className="font-label-lg text-label-lg text-white mb-1 font-semibold">
-                  Resolve 2 Flagged Items
+                  {reportData.missingCount + reportData.reviewCount > 0
+                    ? `Resolve ${reportData.missingCount + reportData.reviewCount} Flagged Item(s)`
+                    : 'All Criteria Cleared'}
                 </h3>
                 <p className="font-body-sm text-body-sm text-[#7886a3] leading-relaxed">
-                  Obtain the Tahsildar Income Certificate and prepare college name-inconsistency self-declaration.
+                  {reportData.missingCount > 0
+                    ? `Attach missing certificates and prepare scrutiny declarations before portal closing.`
+                    : 'Review final dossier summary and verify college eligibility thresholds.'}
                 </p>
               </div>
             </div>

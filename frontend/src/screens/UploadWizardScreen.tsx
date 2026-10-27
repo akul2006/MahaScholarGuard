@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, ScholarshipScheme, UploadedDocRecord } from '../types';
+import {
+  validateDocumentFile,
+  createUploadedDocRecord,
+  getSampleDossier,
+} from '../services/scholarshipService';
 
 interface UploadWizardScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -19,38 +24,19 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
 }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // File size validation (MahaDBT requires 100 KB - 256 KB)
-  const MIN_SIZE_KB = 50;
-  const MAX_SIZE_KB = 350;
-
   const handleFileUpload = (docCode: string, file: File) => {
     setErrorMessage(null);
-    const sizeKb = file.size / 1024;
+    const spec = selectedScheme.requiredDocuments.find((d) => d.code === docCode);
+    const validation = validateDocumentFile(file, spec);
 
-    // Check extension
-    const extension = '.' + file.name.split('.').pop()?.toLowerCase();
-    const validExtensions = ['.pdf', '.jpg', '.jpeg', '.png'];
-    if (!validExtensions.includes(extension)) {
-      setErrorMessage(`Invalid file format "${extension}". Only PDF, JPG, and PNG are supported.`);
+    if (!validation.valid) {
+      setErrorMessage(validation.error || 'Invalid file format or size.');
       return;
     }
 
-    if (sizeKb > MAX_SIZE_KB) {
-      setErrorMessage(`File is too large (${sizeKb.toFixed(0)} KB). MahaDBT limit is 256 KB.`);
-      return;
-    }
+    const newRecord = createUploadedDocRecord(docCode, file);
 
-    const newRecord: UploadedDocRecord = {
-      id: `doc-${Date.now()}`,
-      docCode,
-      fileName: file.name,
-      fileSizeKb: Math.round(sizeKb),
-      fileType: file.type || 'application/pdf',
-      uploadedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      isSimulated: false,
-      status: 'ready',
-    };
-
+    // Overwrite previous slot cleanly (releases previous File reference)
     onUpdateUploadedDocs({
       ...uploadedDocs,
       [docCode]: newRecord,
@@ -66,60 +52,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
   // One-click demo dossier loader (Loads Aarav Deshmukh's documents with Income intentionally missing to showcase the 78% audit state!)
   const handleLoadSampleDossier = () => {
     setErrorMessage(null);
-    const sampleDossier: Record<string, UploadedDocRecord> = {
-      DOMICILE_CERT: {
-        id: 'sample-dom-01',
-        docCode: 'DOMICILE_CERT',
-        fileName: 'Aarav_Deshmukh_Domicile_FormC.pdf',
-        fileSizeKb: 184,
-        fileType: 'application/pdf',
-        uploadedAt: '11:38 IST',
-        isSimulated: true,
-        status: 'ready',
-      },
-      HSC_MARKSHEET: {
-        id: 'sample-hsc-02',
-        docCode: 'HSC_MARKSHEET',
-        fileName: 'Maharashtra_HSC_Board_Class12_Marksheet.pdf',
-        fileSizeKb: 215,
-        fileType: 'application/pdf',
-        uploadedAt: '11:39 IST',
-        isSimulated: true,
-        status: 'ready',
-      },
-      COLLEGE_BONAFIDE: {
-        id: 'sample-bonafide-03',
-        docCode: 'COLLEGE_BONAFIDE',
-        fileName: 'COEP_Pune_Admission_Fee_Receipt_2024.pdf',
-        fileSizeKb: 142,
-        fileType: 'application/pdf',
-        uploadedAt: '11:40 IST',
-        isSimulated: true,
-        status: 'ready',
-      },
-      RATION_CARD: {
-        id: 'sample-ration-04',
-        docCode: 'RATION_CARD',
-        fileName: 'Maharashtra_Smart_Ration_Card_Family_Tree.pdf',
-        fileSizeKb: 168,
-        fileType: 'application/pdf',
-        uploadedAt: '11:41 IST',
-        isSimulated: true,
-        status: 'ready',
-      },
-      AADHAAR_CARD: {
-        id: 'sample-aadhaar-05',
-        docCode: 'AADHAAR_CARD',
-        fileName: 'Aadhaar_UIDAI_Masked_Digital_Copy.pdf',
-        fileSizeKb: 195,
-        fileType: 'application/pdf',
-        uploadedAt: '11:41 IST',
-        isSimulated: true,
-        status: 'ready',
-      },
-      // Note: INCOME_CERT is left un-uploaded initially so students see the real 1-Critical Missing item flow!
-    };
-
+    const sampleDossier = getSampleDossier(selectedScheme.id);
     onUpdateUploadedDocs(sampleDossier);
   };
 

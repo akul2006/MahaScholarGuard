@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, ScholarshipScheme } from '../types';
-import { MOCK_SCHEMES } from '../services/scholarshipService';
+import { fetchScholarshipSchemes } from '../services/scholarshipService';
 
 interface SchemeSelectionScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -16,10 +16,21 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
   selectedSchemeId,
   onSelectScheme,
 }) => {
+  const [schemes, setSchemes] = useState<ScholarshipScheme[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredSchemes = MOCK_SCHEMES.filter((scheme) => {
+  useEffect(() => {
+    let isMounted = true;
+    fetchScholarshipSchemes().then((data) => {
+      if (isMounted) setSchemes(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const filteredSchemes = schemes.filter((scheme) => {
     const matchesCategory =
       categoryFilter === 'ALL' || scheme.category === categoryFilter;
     const matchesSearch =

@@ -30,6 +30,8 @@ import {
   MOCK_SCHEMES,
   INITIAL_EXTRACTED_FIELDS,
   INITIAL_AUDIT_REPORT,
+  generateAuditReport,
+  createUploadedDocRecord,
 } from './services/scholarshipService';
 
 export default function App() {
@@ -64,15 +66,40 @@ export default function App() {
     setLanguage((prev) => (prev === 'en' ? 'mr' : 'en'));
   };
 
+  const handleSelectScheme = (scheme: ScholarshipScheme) => {
+    setSelectedScheme(scheme);
+    setReportData((prev) => generateAuditReport(scheme, uploadedDocs, extractedFields, prev));
+  };
+
+  const handleUpdateUploadedDocs = (docs: Record<string, UploadedDocRecord>) => {
+    setUploadedDocs(docs);
+    setReportData((prev) => generateAuditReport(selectedScheme, docs, extractedFields, prev));
+  };
+
+  const handleUpdateFields = (fields: ExtractedField[]) => {
+    setExtractedFields(fields);
+    setReportData((prev) => generateAuditReport(selectedScheme, uploadedDocs, fields, prev));
+  };
+
+  const handleFastTrackUpload = (docCode: string, file: File) => {
+    const record = createUploadedDocRecord(docCode, file);
+    const updatedDocs = { ...uploadedDocs, [docCode]: record };
+    setUploadedDocs(updatedDocs);
+    setReportData((prev) => generateAuditReport(selectedScheme, updatedDocs, extractedFields, prev));
+  };
+
   const handleSaveCandidateName = (newName: string) => {
-    setReportData((prev) => ({
-      ...prev,
-      studentName: newName,
-    }));
-    // Also update in extracted fields
-    setExtractedFields((prev) =>
-      prev.map((f) => (f.key === 'studentNameMarksheet' ? { ...f, value: newName } : f))
+    const updatedFields = extractedFields.map((f) =>
+      f.key === 'studentNameMarksheet' ? { ...f, value: newName, status: 'clean' as const } : f
     );
+    setExtractedFields(updatedFields);
+    setReportData((prev) => {
+      const regenerated = generateAuditReport(selectedScheme, uploadedDocs, updatedFields, prev);
+      return {
+        ...regenerated,
+        studentName: newName,
+      };
+    });
   };
 
   return (
@@ -110,15 +137,7 @@ export default function App() {
               onNavigate={setCurrentScreen}
               language={language}
               selectedSchemeId={selectedScheme.id}
-              onSelectScheme={(scheme) => {
-                setSelectedScheme(scheme);
-                setReportData((prev) => ({
-                  ...prev,
-                  schemeId: scheme.id,
-                  schemeNameEn: scheme.nameEn,
-                  departmentNameEn: scheme.departmentEn,
-                }));
-              }}
+              onSelectScheme={handleSelectScheme}
             />
           )}
 
@@ -128,7 +147,7 @@ export default function App() {
               language={language}
               selectedScheme={selectedScheme}
               uploadedDocs={uploadedDocs}
-              onUpdateUploadedDocs={setUploadedDocs}
+              onUpdateUploadedDocs={handleUpdateUploadedDocs}
             />
           )}
 
@@ -137,7 +156,7 @@ export default function App() {
               onNavigate={setCurrentScreen}
               language={language}
               extractedFields={extractedFields}
-              onUpdateFields={setExtractedFields}
+              onUpdateFields={handleUpdateFields}
             />
           )}
 
@@ -148,6 +167,7 @@ export default function App() {
               reportData={reportData}
               onUpdateReportData={setReportData}
               onOpenEditRecordModal={() => setIsEditRecordOpen(true)}
+              onFastTrackUpload={handleFastTrackUpload}
             />
           )}
         </div>

@@ -10,7 +10,7 @@ import { WalkthroughModal } from './components/WalkthroughModal';
 import { CertificateRulesModal } from './components/CertificateRulesModal';
 import { EditRecordModal } from './components/EditRecordModal';
 import { PrivacyDirectiveModal } from './components/PrivacyDirectiveModal';
-
+import BackendConnectionTest from "./components/BackendConnectionTest";
 import { LandingScreen } from './screens/LandingScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { SchemeSelectionScreen } from './screens/SchemeSelectionScreen';

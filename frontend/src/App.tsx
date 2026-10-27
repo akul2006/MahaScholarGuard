@@ -16,6 +16,7 @@ import { SchemeSelectionScreen } from './screens/SchemeSelectionScreen';
 import { UploadWizardScreen } from './screens/UploadWizardScreen';
 import { DocumentReviewScreen } from './screens/DocumentReviewScreen';
 import { ReadinessReportScreen } from './screens/ReadinessReportScreen';
+import { t } from './i18n';
 
 import {
   ScreenId,
@@ -33,9 +34,21 @@ import {
   createUploadedDocRecord,
 } from './services/scholarshipService';
 
+const LANGUAGE_STORAGE_KEY = 'mahascholar_language';
+
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('home');
-  const [language, setLanguage] = useState<Language>('en');
+  const [language, setLanguage] = useState<Language>(() => {
+    try {
+      const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (saved === 'mr' || saved === 'en') {
+        return saved;
+      }
+    } catch {
+      // LocalStorage access may fail in private browsing
+    }
+    return 'en';
+  });
 
   // Selected scholarship scheme (defaults to Rajarshi Shahu EBC)
   const [selectedScheme, setSelectedScheme] = useState<ScholarshipScheme>(MOCK_SCHEMES[0]);
@@ -54,7 +67,7 @@ export default function App() {
   const [isRulesOpen, setIsRulesOpen] = useState(false);
   const [isEditRecordOpen, setIsEditRecordOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
-  const [privacyModalTitle, setPrivacyModalTitle] = useState('Privacy Directive');
+  const [privacyModalType, setPrivacyModalType] = useState<'privacy' | 'safety'>('privacy');
 
   // Scroll to top on screen navigation
   useEffect(() => {
@@ -62,7 +75,15 @@ export default function App() {
   }, [currentScreen]);
 
   const handleToggleLanguage = () => {
-    setLanguage((prev) => (prev === 'en' ? 'mr' : 'en'));
+    setLanguage((prev) => {
+      const next: Language = prev === 'en' ? 'mr' : 'en';
+      try {
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
+      } catch {
+        // LocalStorage access may fail
+      }
+      return next;
+    });
   };
 
   const handleSelectScheme = (scheme: ScholarshipScheme) => {
@@ -100,6 +121,10 @@ export default function App() {
       };
     });
   };
+
+  const privacyTitle = privacyModalType === 'privacy'
+    ? (language === 'mr' ? 'महास्कॉलर गार्ड गोपनीयता निर्देश' : 'MahaScholar Guard Privacy Directive')
+    : (language === 'mr' ? 'कागदपत्र सुरक्षा व संचयन मानक' : 'Ephemeral Document Safety Standard');
 
   return (
     <div className="bg-[#f7f9fb] text-[#191c1e] min-h-screen flex flex-col antialiased">
@@ -176,11 +201,11 @@ export default function App() {
       <Footer
         language={language}
         onOpenPrivacyModal={() => {
-          setPrivacyModalTitle('MahaScholar Guard Privacy Directive');
+          setPrivacyModalType('privacy');
           setIsPrivacyModalOpen(true);
         }}
         onOpenSafetyModal={() => {
-          setPrivacyModalTitle('Ephemeral Document Safety Standard');
+          setPrivacyModalType('safety');
           setIsPrivacyModalOpen(true);
         }}
       />
@@ -190,11 +215,13 @@ export default function App() {
         isOpen={isWalkthroughOpen}
         onClose={() => setIsWalkthroughOpen(false)}
         onStartAudit={() => setCurrentScreen('upload-wizard')}
+        language={language}
       />
 
       <CertificateRulesModal
         isOpen={isRulesOpen}
         onClose={() => setIsRulesOpen(false)}
+        language={language}
       />
 
       <EditRecordModal
@@ -202,12 +229,14 @@ export default function App() {
         onClose={() => setIsEditRecordOpen(false)}
         reportData={reportData}
         onSaveCandidateName={handleSaveCandidateName}
+        language={language}
       />
 
       <PrivacyDirectiveModal
         isOpen={isPrivacyModalOpen}
         onClose={() => setIsPrivacyModalOpen(false)}
-        title={privacyModalTitle}
+        title={privacyTitle}
+        language={language}
       />
     </div>
   );

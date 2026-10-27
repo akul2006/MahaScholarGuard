@@ -17,6 +17,41 @@ export interface HealthCheckResult {
   data?: HealthResponse;
 }
 
+export interface BackendDocumentSpec {
+  code: string;
+  nameEn: string;
+  nameMr: string;
+  issuingAuthorityEn: string;
+  issuingAuthorityMr: string;
+  instructionsEn: string;
+  instructionsMr: string;
+}
+
+export interface BackendValidateRequest {
+  schemeId: string;
+  documentCodes: string[];
+  language?: 'en' | 'mr';
+}
+
+export interface BackendValidateResponse {
+  schemeId: string;
+  schemeNameEn: string;
+  schemeNameMr: string;
+  rulesetStatus: string;
+  warningEn: string;
+  warningMr: string;
+  requiredDocumentCodes: string[];
+  presentDocumentCodes: string[];
+  missingDocumentCodes: string[];
+  isReady: boolean;
+  summaryEn: string;
+  summaryMr: string;
+  missingDocuments: BackendDocumentSpec[];
+  presentDocuments: BackendDocumentSpec[];
+  disclaimerEn: string;
+  disclaimerMr: string;
+}
+
 /**
  * Backend base URL read from VITE_API_BASE_URL, defaulting to http://127.0.0.1:8000.
  * Strips trailing slashes to guarantee clean URL path composition.
@@ -65,19 +100,15 @@ export async function checkBackendHealth(signal?: AbortSignal): Promise<HealthRe
 
     return data;
   } catch (error: unknown) {
-    // If request was aborted by component unmounting, rethrow to be ignored safely
     if (signal?.aborted) {
       throw new DOMException('Request aborted by caller', 'AbortError');
     }
 
-    // Timeout occurred
     if (controller.signal.aborted) {
       throw new Error('Connection timed out. Check that the FastAPI server is running.');
     }
 
-    // Known Error
     if (error instanceof Error) {
-      // Avoid raw browser error dumps or stack traces
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
         throw new Error('Cannot connect. Check that the FastAPI server is running.');
       }
@@ -90,3 +121,71 @@ export async function checkBackendHealth(signal?: AbortSignal): Promise<HealthRe
   }
 }
 
+/**
+ * Evaluates document readiness via POST /api/validate on the FastAPI backend rules engine.
+ * Privacy guarantee: Only scheme ID and document-type codes are transmitted.
+ * No file binaries, personal credentials, or extracted fields are ever sent.
+ */
+export async function validateDocumentsWithBackend(
+  payload: BackendValidateRequest,
+  signal?: AbortSignal
+): Promise<BackendValidateResponse> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+
+  if (signal) {
+    if (signal.aborted) {
+      clearTimeout(timeoutId);
+      controller.abort();
+    } else {
+      signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/validate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      let errorDetail = `HTTP ${response.status}`;
+      try {
+        const errorJson = await response.json();
+        if (errorJson?.detail) {
+          errorDetail = typeof errorJson.detail === 'string' ? errorJson.detail : JSON.stringify(errorJson.detail);
+        }
+      } catch {
+        // Fallback to HTTP status
+      }
+      throw new Error(errorDetail);
+    }
+
+    const data: BackendValidateResponse = await response.json();
+    return data;
+  } catch (error: unknown) {
+    if (signal?.aborted) {
+      throw new DOMException('Request aborted by caller', 'AbortError');
+    }
+
+    if (controller.signal.aborted) {
+      throw new Error('Validation request timed out. Verify backend server is running.');
+    }
+
+    if (error instanceof Error) {
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        throw new Error('Backend validation unavailable. FastAPI server could not be reached.');
+      }
+      throw error;
+    }
+
+    throw new Error('Unknown error during backend document validation.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}

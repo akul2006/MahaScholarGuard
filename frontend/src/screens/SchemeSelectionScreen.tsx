@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, ScholarshipScheme } from '../types';
 import { fetchScholarshipSchemes } from '../services/scholarshipService';
+import { t } from '../i18n';
 
 interface SchemeSelectionScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -30,14 +31,25 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
     };
   }, []);
 
+  const categoryOptions = [
+    { id: 'ALL', labelKey: 'schemeAllFilter' },
+    { id: 'EBC', labelKey: 'schemeEBCFilter' },
+    { id: 'SC', labelKey: 'schemeSCFilter' },
+    { id: 'OBC', labelKey: 'schemeOBCFilter' },
+    { id: 'ST', labelKey: 'schemeSTFilter' },
+  ];
+
   const filteredSchemes = schemes.filter((scheme) => {
     const matchesCategory =
       categoryFilter === 'ALL' || scheme.category === categoryFilter;
+    const q = searchQuery.toLowerCase();
     const matchesSearch =
       searchQuery === '' ||
-      scheme.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.departmentEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      scheme.code.toLowerCase().includes(searchQuery.toLowerCase());
+      scheme.nameEn.toLowerCase().includes(q) ||
+      scheme.nameMr.toLowerCase().includes(q) ||
+      scheme.departmentEn.toLowerCase().includes(q) ||
+      scheme.departmentMr.toLowerCase().includes(q) ||
+      scheme.code.toLowerCase().includes(q);
     return matchesCategory && matchesSearch;
   });
 
@@ -51,14 +63,14 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
         <div className="flex items-center gap-2 mb-1">
           <span className="material-symbols-outlined text-[#3755c3]">list_alt</span>
           <span className="text-xs uppercase font-semibold tracking-wider text-[#3755c3]">
-            Maharashtra Scholarship Catalog
+            {t('schemeCatalogBadge', language)}
           </span>
         </div>
         <h1 className="font-headline-lg text-headline-lg text-[#000412] font-bold">
-          Select Your Targeted Scholarship Scheme
+          {t('schemePageTitle', language)}
         </h1>
         <p className="font-body-md text-body-md text-[#44474d] max-w-3xl mt-1">
-          Choose the scheme applicable to your social category, family income bracket, and degree course. Each scheme runs a deterministic document checklist audit.
+          {t('schemePageSubtext', language)}
         </p>
       </div>
 
@@ -66,13 +78,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
       <div className="bg-white p-4 rounded-xl shadow-sm border border-[#e6e8ea] mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Category Pills */}
         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
-          {[
-            { id: 'ALL', label: 'All Schemes (4)' },
-            { id: 'EBC', label: 'EBC / General' },
-            { id: 'SC', label: 'SC / Navabuddha' },
-            { id: 'OBC', label: 'OBC / VJNT / SBC' },
-            { id: 'ST', label: 'ST / Tribal' },
-          ].map((cat) => (
+          {categoryOptions.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setCategoryFilter(cat.id)}
@@ -83,7 +89,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
               }`}
               type="button"
             >
-              {cat.label}
+              {t(cat.labelKey, language)}
             </button>
           ))}
         </div>
@@ -96,7 +102,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
           <input
             type="text"
             className="w-full pl-9 pr-4 py-2 bg-[#f2f4f6] rounded-lg text-[#191c1e] text-xs focus:outline-none focus:bg-white border border-[#c5c6ce] placeholder:text-[#75777e]"
-            placeholder="Search scheme name or dept..."
+            placeholder={t('schemeSearchPlaceholder', language)}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -122,7 +128,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
                     {scheme.code}
                   </span>
                   <span className="text-xs bg-[#f2f4f6] text-[#44474d] px-2 py-0.5 rounded font-medium">
-                    {scheme.requiredDocuments.length} Required Docs
+                    {scheme.requiredDocuments.length} {t('schemeRequiredDocs', language)}
                   </span>
                 </div>
 
@@ -144,20 +150,27 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
                     <span className="material-symbols-outlined text-[16px] text-[#3755c3]">
                       payments
                     </span>
-                    <span className="font-semibold">{scheme.incomeCapLabel}</span>
+                    <span className="font-semibold">
+                      {language === 'mr'
+                        ? (scheme.incomeCapInr ? `कौटुंबिक वार्षिक उत्पन्न मर्यादा ≤ ₹${scheme.incomeCapInr.toLocaleString('en-IN')}/-` : scheme.incomeCapLabel)
+                        : scheme.incomeCapLabel}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1.5 text-[#191c1e]">
                     <span className="material-symbols-outlined text-[16px] text-[#3755c3]">
                       home_pin
                     </span>
-                    <span>Maharashtra Domicile: <strong>Mandatory</strong></span>
+                    <span>
+                      {t('schemeDomicileRequired', language)}{' '}
+                      <strong>{t('schemeDomicileMandatory', language)}</strong>
+                    </span>
                   </div>
                 </div>
 
                 {/* Required Documents Mini-List */}
                 <div className="mb-4">
                   <span className="text-xs font-semibold text-[#191c1e] block mb-2">
-                    Mandatory Checklist Items:
+                    {t('schemeMandatoryDocs', language)}
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {scheme.requiredDocuments.map((doc) => (
@@ -165,7 +178,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
                         key={doc.code}
                         className="text-[11px] bg-[#eceef0] text-[#44474d] px-2 py-0.5 rounded"
                       >
-                        {doc.nameEn}
+                        {language === 'mr' ? doc.nameMr : doc.nameEn}
                       </span>
                     ))}
                   </div>
@@ -180,7 +193,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
                   rel="noopener noreferrer"
                   className="text-xs text-[#3755c3] hover:underline flex items-center gap-1"
                 >
-                  <span>MahaDBT Info</span>
+                  <span>{t('schemeMahaDBTInfo', language)}</span>
                   <span className="material-symbols-outlined text-[14px]">north_east</span>
                 </a>
 
@@ -196,7 +209,7 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
                   }`}
                   type="button"
                 >
-                  <span>{isSelected ? 'Selected • Continue' : 'Select Scheme & Upload'}</span>
+                  <span>{isSelected ? t('schemeSelectedBtn', language) : t('schemeSelectBtn', language)}</span>
                   <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </button>
               </div>
@@ -205,11 +218,17 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
         })}
       </div>
 
+      {filteredSchemes.length === 0 && (
+        <div className="bg-white rounded-xl p-8 text-center border border-[#e6e8ea] mb-8 text-[#44474d] text-sm">
+          {t('schemeEmptyState', language)}
+        </div>
+      )}
+
       {/* Official Data Notice */}
       <div className="bg-[#f2f4f6] p-4 rounded-xl border border-[#c5c6ce] flex items-center gap-3">
         <span className="material-symbols-outlined text-[#3755c3] text-[20px]">policy</span>
         <span className="text-xs text-[#44474d]">
-          Official Government Resolution (GR) criteria. MahaScholar Guard operates with deterministic rules mapped to current Maharashtra administrative circulars.
+          {t('schemeNoticeText', language)}
         </span>
       </div>
     </div>

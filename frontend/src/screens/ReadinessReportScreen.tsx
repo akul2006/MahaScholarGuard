@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, FindingStatus, AuditReportData, FindingItem } from '../types';
+import { validateDocumentsWithBackend, BackendValidateResponse } from '../services/apiClient';
+import { t } from '../i18n';
+import { MOCK_SCHEMES } from '../services/scholarshipService';
 
 interface ReadinessReportScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -21,9 +24,52 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
 }) => {
   const [activeFilter, setActiveFilter] = useState<'all' | FindingStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [ocrSnippetOpen, setOcrSnippetOpen] = useState(false);
   const [shareToast, setShareToast] = useState(false);
   const [saveSuccessToast, setSaveSuccessToast] = useState(false);
+
+  // Backend validation state
+  const [backendValidation, setBackendValidation] = useState<{
+    loading: boolean;
+    data: BackendValidateResponse | null;
+    error: string | null;
+  }>({
+    loading: false,
+    data: null,
+    error: null,
+  });
+
+  const runBackendValidation = useCallback(async (signal?: AbortSignal) => {
+    setBackendValidation({ loading: true, data: null, error: null });
+
+    // Collect present document codes from verified findings
+    const presentCodes = reportData.findings
+      .filter((f) => f.type === 'verified' && f.docCode)
+      .map((f) => f.docCode as string);
+
+    try {
+      const response = await validateDocumentsWithBackend(
+        {
+          schemeId: reportData.schemeId,
+          documentCodes: presentCodes,
+          language: language,
+        },
+        signal
+      );
+      setBackendValidation({ loading: false, data: response, error: null });
+    } catch (err: unknown) {
+      if (signal?.aborted) return;
+      const errorMsg = err instanceof Error ? err.message : t('validateError', language);
+      setBackendValidation({ loading: false, data: null, error: errorMsg });
+    }
+  }, [reportData.schemeId, reportData.findings, language]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    runBackendValidation(controller.signal);
+    return () => {
+      controller.abort();
+    };
+  }, [runBackendValidation]);
 
   // Fast-track upload for missing certificates
   const handleFastTrackFileChange = (docCode: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,9 +83,9 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             return {
               ...f,
               type: 'verified' as FindingStatus,
-              badgeLabel: 'Uploaded & Valid',
+              badgeLabel: language === 'mr' ? 'अपलोड व वैध' : 'Uploaded & Valid',
               flagReasonEn: `Uploaded "${file.name}" (${(file.size / 1024).toFixed(1)} KB). Format verified for submission.`,
-              remediationActionEn: 'Document successfully cleared for MahaDBT submission.',
+              remediationActionEn: language === 'mr' ? 'कागदपत्र MahaDBT सादरणीसाठी मंजूर.' : 'Document successfully cleared for MahaDBT submission.',
             };
           }
           return f;
@@ -87,7 +133,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
         return {
           ...f,
           barcodeConfirmed: true,
-          badgeLabel: 'Barcode Confirmed',
+          badgeLabel: language === 'mr' ? 'बारकोड पुष्टी' : 'Barcode Confirmed',
         };
       }
       return f;
@@ -116,13 +162,19 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
   // Filter & Search logic
   const filteredFindings = reportData.findings.filter((finding) => {
     const matchesFilter = activeFilter === 'all' || finding.type === activeFilter;
+    const q = searchQuery.toLowerCase();
     const matchesSearch =
       searchQuery === '' ||
-      finding.searchPool.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      finding.titleEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      finding.flagReasonEn.toLowerCase().includes(searchQuery.toLowerCase());
+      finding.searchPool.toLowerCase().includes(q) ||
+      finding.titleEn.toLowerCase().includes(q) ||
+      finding.titleMr.toLowerCase().includes(q) ||
+      finding.flagReasonEn.toLowerCase().includes(q);
     return matchesFilter && matchesSearch;
   });
+
+  const currentScheme = MOCK_SCHEMES.find((s) => s.id === reportData.schemeId);
+  const schemeName = language === 'mr' ? (currentScheme?.nameMr || reportData.schemeNameEn) : reportData.schemeNameEn;
+  const deptName = language === 'mr' ? (currentScheme?.departmentMr || reportData.departmentNameEn) : reportData.departmentNameEn;
 
   return (
     <div className="flex flex-col w-full">
@@ -130,14 +182,14 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
       {shareToast && (
         <div className="fixed top-24 right-6 z-50 bg-[#0f1e36] text-white px-4 py-2.5 rounded-lg shadow-xl text-xs font-semibold flex items-center gap-2 animate-bounce">
           <span className="material-symbols-outlined text-[18px] text-[#708cfd]">check_circle</span>
-          <span>Sharable audit link copied to clipboard!</span>
+          <span>{t('reportShareToast', language)}</span>
         </div>
       )}
 
       {saveSuccessToast && (
         <div className="fixed top-24 right-6 z-50 bg-[#13968a] text-white px-4 py-2.5 rounded-lg shadow-xl text-xs font-semibold flex items-center gap-2">
           <span className="material-symbols-outlined text-[18px]">verified</span>
-          <span>Audit state saved to your student dashboard!</span>
+          <span>{t('reportSaveToast', language)}</span>
         </div>
       )}
 
@@ -149,7 +201,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           type="button"
         >
           <span className="material-symbols-outlined text-[16px]">home</span>
-          <span>Dashboard</span>
+          <span>{t('reportBreadcrumbDashboard', language)}</span>
         </button>
         <span className="material-symbols-outlined text-[14px] text-[#75777e]">chevron_right</span>
         <button
@@ -157,13 +209,13 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           className="hover:text-[#000412] transition-colors cursor-pointer"
           type="button"
         >
-          Document Checks
+          {t('reportBreadcrumbChecks', language)}
         </button>
         <span className="material-symbols-outlined text-[14px] text-[#75777e]">chevron_right</span>
-        <span className="text-[#191c1e] font-semibold">Check #{reportData.prepId}</span>
+        <span className="text-[#191c1e] font-semibold">{t('reportBreadcrumbCheck', language)}{reportData.prepId}</span>
         <span className="material-symbols-outlined text-[14px] text-[#75777e]">chevron_right</span>
         <span className="bg-[#000412] text-white px-2 py-0.5 rounded font-label-sm text-label-sm font-medium">
-          Readiness Report
+          {t('reportBreadcrumbReport', language)}
         </span>
       </div>
 
@@ -172,7 +224,6 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
 
       {/* Hero Header Card */}
       <div className="relative bg-white rounded-xl shadow-sm p-6 mb-6 overflow-hidden border border-[#c5c6ce]">
-        {/* Subtle Institutional Backdrop Decor */}
         <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-[#708cfd]/10 pointer-events-none blur-3xl"></div>
         <div className="absolute right-32 top-8 text-[#e0e3e5]/60 select-none pointer-events-none hidden lg:block">
           <span className="material-symbols-outlined text-[140px] leading-none">policy</span>
@@ -182,19 +233,19 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex flex-col gap-1 max-w-3xl">
             <div className="flex flex-wrap items-center gap-2">
               <span className="bg-[#dde1ff] text-[#001453] font-label-sm text-label-sm px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1">
-                <span className="material-symbols-outlined text-[13px]">verified</span> Pre-Submission Audit
+                <span className="material-symbols-outlined text-[13px]">verified</span> {t('reportPreSubmissionBadge', language)}
               </span>
               <span className="text-[#44474d] font-label-sm text-label-sm">
-                Application Prep ID: <span className="font-semibold text-[#191c1e]">{reportData.prepId}</span>
+                {t('reportPrepID', language)} <span className="font-semibold text-[#191c1e]">{reportData.prepId}</span>
               </span>
               <span className="text-[#c5c6ce]">•</span>
               <span className="text-[#44474d] font-label-sm text-label-sm">
-                Generated: {reportData.generatedDate}
+                {t('reportGenerated', language)} {reportData.generatedDate}
               </span>
             </div>
 
             <h1 className="font-headline-lg text-headline-lg text-[#000412] tracking-tight mt-1">
-              Document Readiness Audit Report
+              {t('reportTitle', language)}
             </h1>
 
             <div className="mt-2 bg-[#f2f4f6] p-3 rounded-lg flex items-start gap-3 border border-[#e6e8ea]">
@@ -203,13 +254,13 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </span>
               <div className="flex flex-col">
                 <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider">
-                  Target Scholarship Scheme
+                  {t('reportTargetScheme', language)}
                 </span>
                 <span className="font-label-lg text-label-lg text-[#191c1e] font-bold">
-                  {reportData.schemeNameEn}
+                  {schemeName}
                 </span>
                 <span className="font-body-sm text-body-sm text-[#44474d]">
-                  {reportData.departmentNameEn} • Candidate:{' '}
+                  {deptName} • {t('reportCandidate', language)}{' '}
                   <strong className="text-[#191c1e] font-semibold">{reportData.studentName}</strong> ({reportData.collegeName})
                 </span>
               </div>
@@ -224,7 +275,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               type="button"
             >
               <span className="material-symbols-outlined text-[18px]">download</span>
-              <span>Download PDF Report</span>
+              <span>{t('reportDownloadPDF', language)}</span>
             </button>
             <div className="flex items-center gap-2">
               <button
@@ -233,7 +284,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                 type="button"
               >
                 <span className="material-symbols-outlined text-[16px]">share</span>
-                <span>Share Summary</span>
+                <span>{t('reportShareSummary', language)}</span>
               </button>
               <button
                 onClick={() => window.print()}
@@ -241,7 +292,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                 type="button"
               >
                 <span className="material-symbols-outlined text-[16px]">print</span>
-                <span>Print Checklist</span>
+                <span>{t('reportPrintChecklist', language)}</span>
               </button>
             </div>
           </div>
@@ -255,7 +306,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex flex-col">
               <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                Overall Readiness
+                {t('reportOverallReadiness', language)}
               </span>
               <span className="font-headline-md text-headline-md text-[#000412] mt-1 font-bold">
                 {reportData.overallReadiness}%
@@ -288,17 +339,17 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           </div>
           <div>
             <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#dde1ff] text-[#001453] font-label-sm text-label-sm mb-1 font-semibold">
-              <span className="material-symbols-outlined text-[14px]">warning</span> Needs Attention
+              <span className="material-symbols-outlined text-[14px]">warning</span> {t('reportNeedsAttention', language)}
             </div>
             <p className="font-body-sm text-body-sm text-[#44474d] leading-snug">
               {reportData.missingCount > 0 || reportData.reviewCount > 0
-                ? `${reportData.missingCount + reportData.reviewCount} items require verification before final submission on MahaDBT portal.`
-                : 'All documents verified and ready for MahaDBT submission.'}
+                ? `${reportData.missingCount + reportData.reviewCount} ${t('reportItemsNeedVerification', language)}`
+                : t('reportAllVerified', language)}
             </p>
           </div>
           <div className="mt-3 pt-1 text-[10px] text-[#75777e] flex items-center gap-1 leading-tight">
             <span className="material-symbols-outlined text-[12px]">info</span>
-            <span>Advisory guidance only. Official approval rests solely with the competent authority.</span>
+            <span>{t('reportAdvisoryOnly', language)}</span>
           </div>
         </div>
 
@@ -307,10 +358,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex items-start justify-between">
             <div className="flex flex-col">
               <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                Complete &amp; Verified
+                {t('reportCompleteVerified', language)}
               </span>
               <span className="font-headline-md text-headline-md text-[#13968a] mt-1 font-bold">
-                {reportData.verifiedCount} Documents
+                {reportData.verifiedCount} {t('dashboardDocuments', language)}
               </span>
             </div>
             <div className="w-10 h-10 rounded-full bg-[#89f5e7] flex items-center justify-center text-[#13968a]">
@@ -330,13 +381,13 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             </div>
             <p className="font-body-sm text-body-sm text-[#44474d]">
               {reportData.verifiedCount > 0
-                ? `${reportData.verifiedCount} of ${reportData.findings.length} criteria cleared for ${reportData.schemeNameEn}.`
-                : 'No documents verified yet. Upload required scheme documents.'}
+                ? `${reportData.verifiedCount} ${t('reportCriteriaCleared', language)} ${reportData.findings.length} ${t('reportCriteriaCleared2', language)} ${schemeName}.`
+                : t('reportNoDocsYet', language)}
             </p>
           </div>
           <div className="mt-1">
             <span className="font-label-sm text-label-sm text-[#13968a] font-semibold flex items-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">check_circle</span> Ready to archive
+              <span className="material-symbols-outlined text-[14px]">check_circle</span> {t('reportReadyToArchive', language)}
             </span>
           </div>
         </div>
@@ -346,10 +397,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex items-start justify-between">
             <div className="flex flex-col">
               <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                Needs Review
+                {t('reportNeedsReview', language)}
               </span>
               <span className="font-headline-md text-headline-md text-[#173bab] mt-1 font-bold">
-                {reportData.reviewCount} Flagged
+                {reportData.reviewCount} {t('reportFlagged', language)}
               </span>
             </div>
             <div className="w-10 h-10 rounded-full bg-[#dde1ff] flex items-center justify-center text-[#173bab]">
@@ -361,17 +412,17 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               {reportData.findings.filter((f) => f.type === 'review').slice(0, 2).map((f) => (
                 <div key={f.id} className="flex items-center gap-1 font-semibold text-[#000412] truncate">
                   <span className="w-2 h-2 rounded-full bg-[#3755c3] shrink-0"></span>
-                  <span className="truncate">{f.titleEn}</span>
+                  <span className="truncate">{language === 'mr' ? f.titleMr : f.titleEn}</span>
                 </div>
               ))}
               {reportData.reviewCount === 0 && (
-                <div className="text-xs text-[#13968a]">No pending review items</div>
+                <div className="text-xs text-[#13968a]">{t('reportNoPendingReview', language)}</div>
               )}
             </div>
           </div>
           <div className="mt-1">
             <span className="font-label-sm text-label-sm text-[#3755c3] font-semibold flex items-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">edit_note</span> Student action suggested
+              <span className="material-symbols-outlined text-[14px]">edit_note</span> {t('reportStudentAction', language)}
             </span>
           </div>
         </div>
@@ -381,10 +432,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex items-start justify-between">
             <div className="flex flex-col">
               <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                Missing Required
+                {t('reportMissingRequired', language)}
               </span>
               <span className="font-headline-md text-headline-md text-[#ba1a1a] mt-1 font-bold">
-                {reportData.missingCount} Critical
+                {reportData.missingCount} {t('reportCritical', language)}
               </span>
             </div>
             <div className="w-10 h-10 rounded-full bg-[#ffdad6] flex items-center justify-center text-[#ba1a1a]">
@@ -395,23 +446,150 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             <div className="bg-[#ffdad6]/40 p-2 rounded text-[#191c1e]">
               <span className="font-label-md text-label-md text-[#ba1a1a] block font-semibold truncate">
                 {reportData.missingCount > 0
-                  ? reportData.findings.find((f) => f.type === 'missing')?.titleEn || 'Missing Required'
-                  : 'All Mandatory Attached'}
+                  ? (language === 'mr'
+                      ? (reportData.findings.find((f) => f.type === 'missing')?.titleMr || t('reportMissingRequired', language))
+                      : (reportData.findings.find((f) => f.type === 'missing')?.titleEn || t('reportMissingRequired', language)))
+                  : t('reportAllMandatory', language)}
               </span>
               <span className="font-body-sm text-body-sm text-[#44474d] text-xs">
                 {reportData.missingCount > 0
-                  ? `${reportData.missingCount} mandatory certificate(s) pending`
-                  : 'All required scheme certificates attached'}
+                  ? `${reportData.missingCount} ${t('reportMissingCertPending', language)}`
+                  : t('reportAllRequired', language)}
               </span>
             </div>
           </div>
           <div className="mt-1">
             <span className="font-label-sm text-label-sm text-[#ba1a1a] font-semibold flex items-center gap-1">
               <span className="material-symbols-outlined text-[14px]">priority_high</span>{' '}
-              {reportData.missingCount > 0 ? 'Mandatory for scheme approval' : 'Ready for submission'}
+              {reportData.missingCount > 0 ? t('reportMandatoryForApproval', language) : t('reportReadySubmission', language)}
             </span>
           </div>
         </div>
+      </div>
+
+      {/* ------------------------------------------------------------------- */}
+      {/* PART B: Backend Rules Engine Validation Card                        */}
+      {/* ------------------------------------------------------------------- */}
+      <div className="bg-white rounded-xl shadow-sm border border-[#c5c6ce] p-5 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 mb-3 border-b border-[#eceef0] gap-2">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#3755c3] text-[22px]">settings_suggest</span>
+            <div>
+              <h2 className="font-headline-sm text-headline-sm text-[#000412] font-bold text-sm">
+                {t('validateTitle', language)}
+              </h2>
+              <span className="text-[11px] text-[#44474d]">
+                FastAPI Endpoint: <code className="font-mono bg-[#f2f4f6] px-1 py-0.5 rounded">POST /api/validate</code>
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => runBackendValidation()}
+            disabled={backendValidation.loading}
+            className="self-start sm:self-auto px-3 py-1.5 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-60"
+            type="button"
+          >
+            <span className={`material-symbols-outlined text-[14px] ${backendValidation.loading ? 'animate-spin' : ''}`}>
+              refresh
+            </span>
+            <span>{backendValidation.loading ? t('validateRunning', language) : t('validateRunBtn', language)}</span>
+          </button>
+        </div>
+
+        {backendValidation.loading && (
+          <div className="flex items-center gap-3 p-3 bg-[#f2f4f6] rounded-lg text-xs text-[#44474d]">
+            <span className="w-2 h-2 rounded-full bg-[#3755c3] animate-pulse"></span>
+            <span>{t('validateRunning', language)}</span>
+          </div>
+        )}
+
+        {backendValidation.error && (
+          <div className="bg-[#ffdad6]/50 border border-[#ffdad6] p-4 rounded-xl text-xs flex flex-col gap-2">
+            <div className="flex items-center gap-2 text-[#ba1a1a] font-semibold">
+              <span className="material-symbols-outlined text-[18px]">cloud_off</span>
+              <span>{t('validateNotAvailable', language)}</span>
+            </div>
+            <p className="text-[#44474d]">
+              {t('validateNotAvailableBody', language)}
+            </p>
+            <div className="pt-1">
+              <button
+                onClick={() => runBackendValidation()}
+                type="button"
+                className="px-3 py-1 bg-white border border-[#c5c6ce] rounded text-[11px] font-semibold text-[#191c1e] hover:bg-[#eceef0] cursor-pointer"
+              >
+                {t('validateRetry', language)}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {backendValidation.data && (
+          <div className="flex flex-col gap-3">
+            {/* Prototype unverified alert */}
+            <div className="bg-[#fff8e1] border border-[#ffe082] p-3 rounded-lg flex items-start gap-2.5 text-xs text-[#5d4037]">
+              <span className="material-symbols-outlined text-[#f57f17] text-[18px] shrink-0 mt-0.5">
+                warning
+              </span>
+              <div className="flex flex-col">
+                <span className="font-semibold text-[#e65100]">
+                  Ruleset Status: <code className="font-mono font-bold">{backendValidation.data.rulesetStatus}</code>
+                </span>
+                <p className="mt-0.5">
+                  {language === 'mr' ? backendValidation.data.warningMr : backendValidation.data.warningEn}
+                </p>
+              </div>
+            </div>
+
+            {/* Evaluation summary */}
+            <div className="bg-[#f2f4f6] p-3.5 rounded-lg border border-[#e6e8ea] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="flex flex-col">
+                <span className="font-semibold text-[#000412]">
+                  {language === 'mr' ? backendValidation.data.summaryMr : backendValidation.data.summaryEn}
+                </span>
+                <span className="text-[11px] text-[#75777e] mt-0.5">
+                  {language === 'mr' ? backendValidation.data.disclaimerMr : backendValidation.data.disclaimerEn}
+                </span>
+              </div>
+
+              <div className="shrink-0 flex items-center gap-2">
+                <span className="text-xs text-[#44474d]">{t('validateReadiness', language)}</span>
+                <span
+                  className={`px-2.5 py-1 rounded-full font-bold text-[11px] flex items-center gap-1 ${
+                    backendValidation.data.isReady
+                      ? 'bg-[#89f5e7] text-[#13968a]'
+                      : 'bg-[#ffdad6] text-[#ba1a1a]'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-[13px]">
+                    {backendValidation.data.isReady ? 'check_circle' : 'cancel'}
+                  </span>
+                  {backendValidation.data.isReady ? t('validateAllDocs', language) : t('validateIncomplete', language)}
+                </span>
+              </div>
+            </div>
+
+            {/* Missing docs breakdown from backend */}
+            {backendValidation.data.missingDocuments.length > 0 && (
+              <div className="p-3 bg-[#ffdad6]/20 border border-[#ffdad6] rounded-lg text-xs">
+                <span className="font-semibold text-[#ba1a1a] block mb-1.5">
+                  {t('validateMissingDocs', language)}
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {backendValidation.data.missingDocuments.map((doc) => (
+                    <span
+                      key={doc.code}
+                      className="bg-white border border-[#ffdad6] text-[#ba1a1a] px-2 py-0.5 rounded font-medium text-[11px]"
+                    >
+                      {language === 'mr' ? doc.nameMr : doc.nameEn} ({doc.code})
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Interactive Filter & Search Bar */}
@@ -426,7 +604,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             }`}
             type="button"
           >
-            All Findings ({reportData.findings.length})
+            {t('reportAllFindings', language)} ({reportData.findings.length})
           </button>
           <button
             onClick={() => setActiveFilter('missing')}
@@ -437,7 +615,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             }`}
             type="button"
           >
-            Missing ({reportData.missingCount})
+            {t('reportFilterMissing', language)} ({reportData.missingCount})
           </button>
           <button
             onClick={() => setActiveFilter('review')}
@@ -448,7 +626,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             }`}
             type="button"
           >
-            Needs Review ({reportData.reviewCount})
+            {t('reportFilterReview', language)} ({reportData.reviewCount})
           </button>
           <button
             onClick={() => setActiveFilter('verified')}
@@ -459,28 +637,36 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             }`}
             type="button"
           >
-            Verified Ready ({reportData.verifiedCount})
+            {t('reportFilterVerified', language)} ({reportData.verifiedCount})
           </button>
         </div>
 
-        {/* Search Input Field */}
-        <div className="relative w-full md:w-80">
+        {/* Search Finding */}
+        <div className="relative w-full md:w-72">
           <span className="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-[#75777e]">
             search
           </span>
           <input
-            className="w-full pl-9 pr-4 py-2 bg-[#f2f4f6] rounded-lg text-[#191c1e] font-body-sm text-body-sm focus:outline-none focus:bg-white border border-[#c5c6ce] shadow-xs placeholder:text-[#75777e]"
-            placeholder="Filter by document name or field..."
             type="text"
+            className="w-full pl-9 pr-4 py-1.5 bg-[#f2f4f6] rounded-lg text-[#191c1e] text-xs focus:outline-none focus:bg-white border border-[#c5c6ce] placeholder:text-[#75777e]"
+            placeholder={t('reportSearchPlaceholder', language)}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
       </div>
 
+      {filteredFindings.length === 0 && (
+        <div className="bg-white rounded-xl p-8 text-center border border-[#e6e8ea] mb-8 text-[#44474d] text-sm">
+          {t('reportNoFindings', language)}
+        </div>
+      )}
+
       {/* Detailed Findings & Discrepancies Matrix */}
       <div className="flex flex-col gap-4 mb-10">
         {filteredFindings.map((finding) => {
+          const findingTitle = language === 'mr' ? finding.titleMr : finding.titleEn;
+
           if (finding.type === 'missing') {
             return (
               <div
@@ -490,7 +676,11 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                 <div className="bg-[#ffdad6]/40 px-4 py-2 flex items-center justify-between border-b border-[#ffdad6]">
                   <div className="flex items-center gap-1.5 text-[#ba1a1a] font-label-md text-label-md font-semibold">
                     <span className="material-symbols-outlined text-[18px]">cancel</span>
-                    <span>ACTION REQUIRED • MISSING CORE DOCUMENT</span>
+                    <span>
+                      {language === 'mr'
+                        ? 'कृती आवश्यक • अनिवार्य मुख्य कागदपत्र गहाळ'
+                        : 'ACTION REQUIRED • MISSING CORE DOCUMENT'}
+                    </span>
                   </div>
                   <span className="font-label-sm text-label-sm text-[#44474d]">{finding.criterionTitle}</span>
                 </div>
@@ -499,15 +689,15 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                   <div className="flex-1 flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                       <h2 className="font-headline-sm text-headline-sm text-[#000412] font-bold">
-                        {finding.titleEn}
+                        {findingTitle}
                       </h2>
                       <span className="px-2 py-0.5 rounded bg-[#ffdad6] text-[#ba1a1a] font-label-sm text-label-sm font-semibold">
-                        {finding.badgeLabel}
+                        {language === 'mr' ? t('mandatory', language) : finding.badgeLabel}
                       </span>
                     </div>
 
                     <p className="font-body-md text-body-md text-[#191c1e] leading-relaxed mt-1">
-                      <strong>Flag Reason:</strong> {finding.flagReasonEn}
+                      <strong>{t('reportFlagReason', language)}</strong> {finding.flagReasonEn}
                     </p>
 
                     <div className="bg-[#f2f4f6] p-3 rounded-lg mt-2 flex items-start gap-3 border border-[#e6e8ea]">
@@ -516,7 +706,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                       </span>
                       <div className="flex flex-col">
                         <span className="font-label-md text-label-md text-[#191c1e] font-semibold">
-                          Recommended Remediation Action:
+                          {t('reportRemediation', language)}
                         </span>
                         <p className="font-body-sm text-body-sm text-[#44474d] mt-0.5 leading-relaxed">
                           {finding.remediationActionEn}
@@ -528,14 +718,14 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                   {/* Fast-Track Upload Module */}
                   <div className="w-full lg:w-72 bg-[#f2f4f6] p-4 rounded-xl flex flex-col gap-2 shrink-0 border border-[#c5c6ce] no-print">
                     <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                      Fast-track upload
+                      {t('reportFastTrackUpload', language)}
                     </span>
                     <label className="bg-white p-3 rounded-lg text-center flex flex-col items-center justify-center cursor-pointer hover:bg-[#eceef0] border border-dashed border-[#c5c6ce] transition-colors">
                       <span className="material-symbols-outlined text-[#3755c3] text-[32px]">
                         upload_file
                       </span>
                       <span className="font-label-md text-label-md text-[#000412] mt-1 font-semibold truncate max-w-[200px]">
-                        Select {finding.titleEn}
+                        {findingTitle}
                       </span>
                       <span className="font-body-sm text-body-sm text-[#44474d]">PDF/Image, Max 256 KB</span>
                       <input
@@ -562,7 +752,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                       type="button"
                     >
                       <span className="material-symbols-outlined text-[16px]">cloud_upload</span>
-                      <span>Upload {finding.titleEn}</span>
+                      <span>{language === 'mr' ? `${findingTitle} अपलोड करा` : `Upload ${finding.titleEn}`}</span>
                     </button>
                   </div>
                 </div>
@@ -582,8 +772,8 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                     <span className="material-symbols-outlined text-[18px]">warning</span>
                     <span>
                       {isNameCheck
-                        ? 'NEEDS REVIEW • IDENTITY CROSS-VERIFICATION'
-                        : 'NEEDS REVIEW • ISSUANCE AGE & BARCODE VERIFICATION'}
+                        ? (language === 'mr' ? 'पुनरावलोकन आवश्यक • ओळख पडताळणी' : 'NEEDS REVIEW • IDENTITY CROSS-VERIFICATION')
+                        : (language === 'mr' ? 'पुनरावलोकन आवश्यक • दाखला वय व बारकोड पडताळणी' : 'NEEDS REVIEW • ISSUANCE AGE & BARCODE VERIFICATION')}
                     </span>
                   </div>
                   <span className="font-label-sm text-label-sm text-[#44474d]">{finding.criterionTitle}</span>
@@ -593,252 +783,165 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
                     <div>
                       <h2 className="font-headline-sm text-headline-sm text-[#000412] font-bold">
-                        {finding.titleEn}
+                        {findingTitle}
                       </h2>
                       <p className="font-body-sm text-body-sm text-[#44474d] mt-0.5">
                         {isNameCheck
-                          ? 'Differences detected between Board Qualifying Marksheet & Aadhaar Card Identity Data.'
-                          : 'Issued 14 Aug 2021 (3.2 years old) • Cert No: DOM/2021/78912'}
+                          ? (language === 'mr'
+                              ? 'बोर्ड पात्रता गुणपत्रिका आणि आधार कार्डातील नावात तफावत आढळली.'
+                              : 'Differences detected between Board Qualifying Marksheet & Aadhaar Card Identity Data.')
+                          : (language === 'mr'
+                              ? 'महाराष्ट्र अधिवास दाखला आपले सरकार बारकोड पडताळणी प्रलंबित आहे.'
+                              : 'Aaple Sarkar digital repository confirmation recommended for COEP scrutiny.')}
                       </p>
                     </div>
-                    <span className="bg-[#dde1ff] text-[#001453] font-label-sm text-label-sm px-3 py-1 rounded-full font-semibold flex items-center gap-1 self-start">
-                      <span className="material-symbols-outlined text-[14px]">psychology</span>{' '}
-                      {finding.badgeLabel}
-                    </span>
+
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-1 rounded bg-[#dde1ff] text-[#001453] font-label-sm text-label-sm font-semibold">
+                        {finding.badgeLabel}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Comparative Cards for Name Mismatch */}
-                  {isNameCheck && finding.docA && finding.docB && (
+                  <p className="font-body-md text-body-md text-[#191c1e] leading-relaxed">
+                    <strong>{t('reportFlagReason', language)}</strong> {finding.flagReasonEn}
+                  </p>
+
+                  {/* Cross-Document Comparison Card if applicable */}
+                  {finding.docA && finding.docB && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#f2f4f6] p-4 rounded-xl border border-[#e6e8ea]">
-                      <div className="bg-white p-3 rounded-lg flex flex-col gap-1 shadow-xs border border-[#e6e8ea]">
-                        <div className="flex items-center justify-between">
-                          <span className="font-label-sm text-label-sm text-[#44474d] uppercase font-semibold">
-                            {finding.docA.title}
-                          </span>
-                          <span className="material-symbols-outlined text-[#3755c3] text-[16px]">badge</span>
-                        </div>
-                        <span className="font-label-lg text-label-lg text-[#000412] font-mono tracking-tight font-bold">
-                          {finding.docA.value}
+                      <div className="flex flex-col gap-1 p-3 bg-white rounded-lg border border-[#c5c6ce]">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#3755c3]">
+                          {finding.docA.title}
                         </span>
-                        <span className="font-body-sm text-body-sm text-[#44474d]">
-                          {finding.docA.meta}
-                        </span>
+                        <span className="font-mono text-sm font-bold text-[#000412]">{finding.docA.value}</span>
+                        <span className="text-[11px] text-[#44474d] mt-1">{finding.docA.meta}</span>
                       </div>
 
-                      <div className="bg-white p-3 rounded-lg flex flex-col gap-1 shadow-xs border border-[#e6e8ea]">
-                        <div className="flex items-center justify-between">
-                          <span className="font-label-sm text-label-sm text-[#ba1a1a] uppercase font-semibold">
-                            {finding.docB.title}
-                          </span>
-                          <span className="material-symbols-outlined text-[#ba1a1a] text-[16px]">
-                            history_edu
-                          </span>
-                        </div>
-                        <span className="font-label-lg text-label-lg text-[#ba1a1a] font-mono tracking-tight font-bold">
-                          {finding.docB.value}
+                      <div className="flex flex-col gap-1 p-3 bg-white rounded-lg border border-[#c5c6ce]">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#ba1a1a]">
+                          {finding.docB.title}
                         </span>
-                        <span className="font-body-sm text-body-sm text-[#44474d]">
-                          {finding.docB.meta}
-                        </span>
+                        <span className="font-mono text-sm font-bold text-[#ba1a1a]">{finding.docB.value}</span>
+                        <span className="text-[11px] text-[#44474d] mt-1">{finding.docB.meta}</span>
                       </div>
                     </div>
                   )}
 
-                  <div className="flex flex-col gap-2">
-                    <p className="font-body-md text-body-md text-[#191c1e] leading-relaxed">
-                      <strong>Flag Reason:</strong> {finding.flagReasonEn}
-                    </p>
-
-                    <div className="bg-[#eceef0] p-3 rounded-lg flex items-start gap-3 border border-[#c5c6ce]/50">
-                      <span className="material-symbols-outlined text-[#3755c3] text-[18px] mt-0.5">
-                        verified_user
+                  {/* Remediation Note */}
+                  <div className="bg-[#f2f4f6] p-3 rounded-lg flex items-start gap-3 border border-[#e6e8ea]">
+                    <span className="material-symbols-outlined text-[#3755c3] text-[20px] mt-0.5">
+                      tips_and_updates
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="font-label-md text-label-md text-[#191c1e] font-semibold">
+                        {t('reportRemediation', language)}
                       </span>
-                      <p className="font-body-sm text-body-sm text-[#44474d] leading-relaxed">
-                        <strong>College Desk Advice:</strong> {finding.remediationActionEn}
+                      <p className="font-body-sm text-body-sm text-[#44474d] mt-0.5 leading-relaxed">
+                        {finding.remediationActionEn}
                       </p>
                     </div>
                   </div>
 
-                  {/* OCR Details & Accordion */}
-                  {isNameCheck && finding.detailsOcr && (
-                    <div className="flex flex-col gap-2 pt-1 no-print">
-                      <div className="bg-[#f2f4f6] rounded-lg p-3 border border-[#e6e8ea]">
-                        <button
-                          onClick={() => setOcrSnippetOpen(!ocrSnippetOpen)}
-                          className="w-full flex items-center justify-between text-left font-label-md text-label-md text-[#191c1e] select-none cursor-pointer"
-                          type="button"
-                        >
-                          <span className="flex items-center gap-2 font-semibold">
-                            <span className="material-symbols-outlined text-[#3755c3] text-[18px]">
-                              document_scanner
-                            </span>
-                            <span>View Side-by-Side OCR comparison snippet</span>
-                          </span>
-                          <span
-                            className={`material-symbols-outlined text-[18px] text-[#75777e] transition-transform ${
-                              ocrSnippetOpen ? 'rotate-180' : ''
-                            }`}
-                          >
-                            expand_more
-                          </span>
-                        </button>
-
-                        {ocrSnippetOpen && (
-                          <div className="mt-3 pt-2 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono bg-white p-3 rounded border border-[#c5c6ce]">
-                            <div className="p-2 bg-[#f2f4f6] rounded">
-                              <div className="font-bold text-[#000412] mb-1">Aadhaar OCR Dump:</div>
-                              <div className="text-[#44474d] leading-relaxed whitespace-pre-line">
-                                {finding.detailsOcr.sourceA}
-                              </div>
-                            </div>
-                            <div className="p-2 bg-[#f2f4f6] rounded">
-                              <div className="font-bold text-[#000412] mb-1">
-                                Maharashtra HSC Board OCR Dump:
-                              </div>
-                              <div className="text-[#44474d] leading-relaxed whitespace-pre-line">
-                                {finding.detailsOcr.sourceB}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-2 mt-1">
-                        <button
-                          onClick={() => onOpenEditRecordModal(finding.id)}
-                          className="px-4 py-2 rounded-lg bg-[#e6e8ea] text-[#191c1e] font-label-sm text-label-sm hover:bg-[#d8dadc] transition-colors flex items-center gap-1 cursor-pointer font-semibold"
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined text-[16px]">edit</span>
-                          <span>Edit Extracted Record</span>
-                        </button>
-
-                        <button
-                          onClick={() => handleToggleStudentVerified(finding.id)}
-                          className={`px-4 py-2 rounded-lg font-label-sm text-label-sm transition-colors flex items-center gap-1 shadow-sm cursor-pointer font-semibold ${
-                            finding.verifiedByStudent
-                              ? 'bg-[#89f5e7] text-[#00201d]'
-                              : 'bg-[#0f1e36] text-white hover:bg-[#3755c3]'
-                          }`}
-                          type="button"
-                        >
-                          <span className="material-symbols-outlined text-[16px]">
-                            {finding.verifiedByStudent ? 'check_circle' : 'thumb_up'}
-                          </span>
-                          <span>
-                            {finding.verifiedByStudent
-                              ? 'Verified by Candidate'
-                              : 'Mark as Verified by Student'}
-                          </span>
-                        </button>
-                        <span className="font-body-sm text-body-sm text-[#75777e] ml-auto hidden sm:inline">
-                          Self-verification logged to audit log
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Barcode action module for Finding 3 */}
-                  {!isNameCheck && finding.barcodeConfirmed !== undefined && (
-                    <div className="w-full lg:w-72 bg-[#f2f4f6] p-4 rounded-xl flex flex-col gap-2 shrink-0 border border-[#c5c6ce] no-print">
-                      <span className="font-label-sm text-label-sm text-[#44474d] uppercase tracking-wider font-semibold">
-                        Aaple Sarkar Scan
-                      </span>
-                      <div className="p-2.5 rounded-lg bg-white border border-[#e6e8ea] flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[#3755c3] text-[24px]">
-                          qr_code_scanner
-                        </span>
-                        <div className="flex flex-col">
-                          <span className="font-label-sm text-label-sm text-[#000412] font-semibold">
-                            Barcode Detected
-                          </span>
-                          <span className="text-[11px] text-[#44474d] font-mono">
-                            Payload: MAH/DOM/2021/78912
-                          </span>
-                        </div>
-                      </div>
-
+                  {/* Interactive Buttons */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2 no-print">
+                    {finding.barcodeConfirmed !== undefined && (
                       <button
                         onClick={() => handleConfirmBarcode(finding.id)}
-                        disabled={finding.barcodeConfirmed}
-                        className={`w-full py-2.5 rounded-lg font-label-md text-label-md transition-all flex items-center justify-center gap-1 shadow-sm cursor-pointer ${
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
                           finding.barcodeConfirmed
-                            ? 'bg-[#89f5e7] text-[#00201d] font-bold cursor-default'
-                            : 'bg-[#000412] text-white hover:bg-[#3755c3]'
+                            ? 'bg-[#13968a] text-white shadow-xs'
+                            : 'bg-[#eceef0] text-[#191c1e] hover:bg-[#e6e8ea]'
                         }`}
                         type="button"
                       >
-                        <span className="material-symbols-outlined text-[16px]">
-                          {finding.barcodeConfirmed ? 'verified' : 'check_box'}
-                        </span>
+                        <span className="material-symbols-outlined text-[16px]">qr_code_scanner</span>
                         <span>
-                          {finding.barcodeConfirmed ? 'Barcode Confirmed Valid' : 'Confirm Barcode Valid'}
+                          {finding.barcodeConfirmed ? t('reportBarcodeConfirmed', language) : t('reportBarcodeConfirm', language)}
                         </span>
                       </button>
-                    </div>
-                  )}
+                    )}
+
+                    {finding.verifiedByStudent !== undefined && (
+                      <button
+                        onClick={() => handleToggleStudentVerified(finding.id)}
+                        className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all cursor-pointer ${
+                          finding.verifiedByStudent
+                            ? 'bg-[#13968a] text-white shadow-xs'
+                            : 'bg-[#eceef0] text-[#191c1e] hover:bg-[#e6e8ea]'
+                        }`}
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">assignment_turned_in</span>
+                        <span>
+                          {finding.verifiedByStudent ? t('reportAffidavitMarked', language) : t('reportAffidavitNote', language)}
+                        </span>
+                      </button>
+                    )}
+
+                    {isNameCheck && (
+                      <button
+                        onClick={() => onOpenEditRecordModal(finding.id)}
+                        className="px-3.5 py-1.5 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] flex items-center gap-1 transition-colors cursor-pointer"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">edit</span>
+                        <span>{t('editRecordTitle', language)}</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             );
           }
 
-          // Verified Items
+          // Verified Finding Card
           return (
             <div
               key={finding.id}
-              className="bg-white rounded-xl shadow-sm border border-[#e6e8ea] overflow-hidden flex flex-col"
+              className="bg-white rounded-xl shadow-sm border border-[#e6e8ea] p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
             >
-              <div className="bg-[#89f5e7]/30 px-4 py-2 flex items-center justify-between border-b border-[#89f5e7]/60">
-                <div className="flex items-center gap-1.5 text-[#13968a] font-label-md text-label-md font-semibold">
-                  <span className="material-symbols-outlined text-[18px]">verified</span>
-                  <span>VERIFIED READY • {finding.criterionTitle.toUpperCase()}</span>
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-[#89f5e7] flex items-center justify-center text-[#13968a] shrink-0">
+                  <span className="material-symbols-outlined text-[26px]">
+                    {finding.docCode === 'HSC_MARKSHEET'
+                      ? 'school'
+                      : finding.docCode === 'AADHAAR_CARD' || finding.id === 'f-5'
+                      ? 'account_balance_wallet'
+                      : finding.docCode === 'RATION_CARD' || finding.id === 'f-6'
+                      ? 'groups'
+                      : finding.docCode === 'COLLEGE_BONAFIDE' || finding.id === 'f-4'
+                      ? 'apartment'
+                      : finding.docCode === 'DOMICILE_CERT' || finding.id === 'f-7'
+                      ? 'home_pin'
+                      : finding.docCode === 'INCOME_CERT'
+                      ? 'payments'
+                      : 'task_alt'}
+                  </span>
                 </div>
-                <span className="font-label-sm text-label-sm text-[#44474d]">{finding.criterionTitle}</span>
+                <div className="flex flex-col">
+                  <h2 className="font-headline-sm text-headline-sm text-[#000412] font-semibold">
+                    {findingTitle}
+                  </h2>
+                  <span className="font-body-md text-body-md text-[#191c1e] mt-0.5">
+                    {finding.flagReasonEn}
+                  </span>
+                </div>
               </div>
 
-              <div className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-[#89f5e7] flex items-center justify-center text-[#13968a] shrink-0">
-                    <span className="material-symbols-outlined text-[26px]">
-                      {finding.docCode === 'HSC_MARKSHEET'
-                        ? 'school'
-                        : finding.docCode === 'AADHAAR_CARD' || finding.id === 'f-5'
-                        ? 'account_balance_wallet'
-                        : finding.docCode === 'RATION_CARD' || finding.id === 'f-6'
-                        ? 'groups'
-                        : finding.docCode === 'COLLEGE_BONAFIDE' || finding.id === 'f-4'
-                        ? 'apartment'
-                        : finding.docCode === 'DOMICILE_CERT' || finding.id === 'f-7'
-                        ? 'home_pin'
-                        : finding.docCode === 'INCOME_CERT'
-                        ? 'payments'
-                        : 'task_alt'}
-                    </span>
-                  </div>
-                  <div className="flex flex-col">
-                    <h2 className="font-headline-sm text-headline-sm text-[#000412] font-semibold">
-                      {finding.titleEn}
-                    </h2>
-                    <span className="font-body-md text-body-md text-[#191c1e] mt-0.5">
-                      {finding.flagReasonEn}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-                  <span className="px-3 py-1 rounded-full bg-[#89f5e7] text-[#13968a] font-label-sm text-label-sm font-semibold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">done_all</span>{' '}
-                    {finding.badgeLabel}
-                  </span>
-                  <button
-                    onClick={() => onNavigate('document-review')}
-                    className="p-2 rounded-lg hover:bg-[#eceef0] transition-colors text-[#44474d] cursor-pointer"
-                    title="View Document Details"
-                    type="button"
-                  >
-                    <span className="material-symbols-outlined text-[20px]">visibility</span>
-                  </button>
-                </div>
+              <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                <span className="px-3 py-1 rounded-full bg-[#89f5e7] text-[#13968a] font-label-sm text-label-sm font-semibold flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px]">done_all</span>{' '}
+                  {finding.badgeLabel}
+                </span>
+                <button
+                  onClick={() => onNavigate('document-review')}
+                  className="p-2 rounded-lg hover:bg-[#eceef0] transition-colors text-[#44474d] cursor-pointer"
+                  title={t('dashboardReviewData', language)}
+                  type="button"
+                >
+                  <span className="material-symbols-outlined text-[20px]">visibility</span>
+                </button>
               </div>
             </div>
           );
@@ -852,11 +955,11 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
           <div className="flex items-center gap-1.5 mb-1 text-[#dde1ff]">
             <span className="material-symbols-outlined text-[20px]">flag</span>
             <span className="font-label-md text-label-md uppercase tracking-wider font-semibold">
-              Candidate Action Plan
+              {t('reportActionRoadmap', language)}
             </span>
           </div>
           <h2 className="font-headline-md text-headline-md text-white mb-6 font-bold">
-            Recommended Preparation Roadmap Before Official Submission
+            {t('reportActionSubtext', language)}
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -870,14 +973,12 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </div>
               <div>
                 <h3 className="font-label-lg text-label-lg text-white mb-1 font-semibold">
-                  {reportData.missingCount + reportData.reviewCount > 0
-                    ? `Resolve ${reportData.missingCount + reportData.reviewCount} Flagged Item(s)`
-                    : 'All Criteria Cleared'}
+                  {reportData.missingCount > 0 ? t('reportStep1Complete', language) : t('reportStep1Done', language)}
                 </h3>
                 <p className="font-body-sm text-body-sm text-[#7886a3] leading-relaxed">
                   {reportData.missingCount > 0
-                    ? `Attach missing certificates and prepare scrutiny declarations before portal closing.`
-                    : 'Review final dossier summary and verify college eligibility thresholds.'}
+                    ? `${reportData.missingCount} ${t('reportMissingCertPending', language)}`
+                    : t('reportAllRequired', language)}
                 </p>
               </div>
             </div>
@@ -892,10 +993,12 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </div>
               <div>
                 <h3 className="font-label-lg text-label-lg text-white mb-1 font-semibold">
-                  Nodal Officer Pre-Check
+                  {t('reportStep2', language)}
                 </h3>
                 <p className="font-body-sm text-body-sm text-[#7886a3] leading-relaxed">
-                  Present this printed audit dossier to your college Scholarship Clerk / Nodal Desk at COEP for clearance.
+                  {language === 'mr'
+                    ? 'अधिवास बारकोड किंवा नावातील अक्षरांची विसंगती प्रतिज्ञापत्राद्वारे (Annexure A) सोडवा.'
+                    : 'Resolve name abbreviation or barcode issues using college self-affidavit.'}
                 </p>
               </div>
             </div>
@@ -910,10 +1013,12 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </div>
               <div>
                 <h3 className="font-label-lg text-label-lg text-white mb-1 font-semibold">
-                  Enforce MahaDBT Specs
+                  {t('reportStep3', language)}
                 </h3>
                 <p className="font-body-sm text-body-sm text-[#7886a3] leading-relaxed">
-                  Ensure all files are color scanned PDFs between 100 KB and 256 KB before uploading to official servers.
+                  {language === 'mr'
+                    ? 'हा मुद्रित अहवाल महाविद्यालयाच्या शिष्यवृत्ती लिपिक किंवा नोडल डेस्ककडे पडताळणीसाठी न्या.'
+                    : 'Present this printed dossier to your college Scholarship Desk before online portal submission.'}
                 </p>
               </div>
             </div>
@@ -928,10 +1033,12 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
               </div>
               <div>
                 <h3 className="font-label-lg text-label-lg text-white mb-1 font-semibold">
-                  Final Submission
+                  {t('reportStep4', language)}
                 </h3>
                 <p className="font-body-sm text-body-sm text-[#7886a3] leading-relaxed">
-                  Log in to <strong className="text-[#dde1ff]">mahadbt.maharashtra.gov.in</strong> and submit before the FY scheme cutoff.
+                  {language === 'mr'
+                    ? 'mahadbt.maharashtra.gov.in वर लॉग इन करून अंतिम मुदतीपूर्वी अर्ज पूर्ण करा.'
+                    : 'Log in to mahadbt.maharashtra.gov.in and submit before the FY cutoff.'}
                 </p>
               </div>
             </div>
@@ -946,10 +1053,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
         </div>
         <div className="flex flex-col gap-1">
           <span className="font-label-md text-label-md text-[#191c1e] uppercase tracking-wider font-semibold">
-            Important Statutory Notice
+            {t('statutoryDisclaimer', language)}
           </span>
           <p className="font-body-sm text-body-sm text-[#44474d] leading-relaxed">
-            <strong>MahaScholar Guard</strong> is an independent document preparation and schema readiness audit assistant developed strictly for educational facilitation. It does not possess governmental authority to approve, sanction, process, or reject official scholarship schemes. Scholarship allocation and monetary disbursement remain under the sole constitutional and statutory jurisdiction of the Government of Maharashtra and relevant department scrutiny officers via the official portal at <em>mahadbt.maharashtra.gov.in</em>.
+            {t('statutoryText', language)}
           </p>
         </div>
       </div>
@@ -963,10 +1070,10 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             type="button"
           >
             <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-            <span>Back to Document Review</span>
+            <span>{t('reviewBackBtn', language)}</span>
           </button>
           <span className="hidden md:inline text-[#44474d] font-label-sm text-label-sm">
-            Prep ID: {reportData.prepId}
+            {t('reportPrepID', language)} {reportData.prepId}
           </span>
         </div>
 
@@ -977,7 +1084,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             type="button"
           >
             <span className="material-symbols-outlined text-[18px]">download</span>
-            <span>Download Full Advisory Dossier (PDF)</span>
+            <span>{t('reportDownloadPDF', language)}</span>
           </button>
 
           <button
@@ -986,7 +1093,7 @@ export const ReadinessReportScreen: React.FC<ReadinessReportScreenProps> = ({
             type="button"
           >
             <span className="material-symbols-outlined text-[18px]">check_circle</span>
-            <span>Finish &amp; Save to Dashboard</span>
+            <span>{t('reportFinishSave', language)}</span>
           </button>
         </div>
       </div>

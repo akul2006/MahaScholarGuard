@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, ExtractedField } from '../types';
+import { t } from '../i18n';
 
 interface DocumentReviewScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -31,7 +32,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
           ...f,
           value: tempValue,
           status: 'clean' as const,
-          note: 'Manually verified and confirmed by student.',
+          note: language === 'mr' ? 'विद्यार्थ्याने व्यक्तिशः पडताळून निश्चित केले.' : 'Manually verified and confirmed by student.',
         };
       }
       return f;
@@ -48,7 +49,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
       {successToast && (
         <div className="fixed top-24 right-6 z-50 bg-[#13968a] text-white px-4 py-2.5 rounded-lg shadow-xl text-xs font-semibold flex items-center gap-2">
           <span className="material-symbols-outlined text-[18px]">check_circle</span>
-          <span>Field value updated &amp; verified!</span>
+          <span>{t('reviewToast', language)}</span>
         </div>
       )}
 
@@ -61,14 +62,14 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
           <div className="flex items-center gap-2 mb-1 text-[#3755c3]">
             <span className="material-symbols-outlined text-[18px]">fact_check</span>
             <span className="text-xs uppercase font-semibold tracking-wider">
-              Step 03 of 04 • Demographics &amp; Value Verification
+              {t('reviewStepLabel', language)}
             </span>
           </div>
           <h1 className="font-headline-lg text-headline-lg text-[#000412] font-bold">
-            Review OCR-Extracted Document Fields
+            {t('reviewTitle', language)}
           </h1>
           <p className="font-body-md text-body-md text-[#44474d] mt-1">
-            Compare parsed fields across your certificates. Make corrections before generating your final Readiness Audit.
+            {t('reviewSubtext', language)}
           </p>
         </div>
 
@@ -77,7 +78,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
           className="self-start md:self-auto px-5 py-2.5 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] flex items-center gap-1.5 shadow-sm transition-all cursor-pointer"
           type="button"
         >
-          <span>Generate Readiness Report</span>
+          <span>{t('reviewGenerateBtn', language)}</span>
           <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
         </button>
       </div>
@@ -89,10 +90,10 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
         </span>
         <div className="flex flex-col text-xs text-[#44474d]">
           <span className="font-semibold text-[#173bab]">
-            Simulated Optical Character Recognition (OCR) Engine
+            {t('reviewSimOCRTitle', language)}
           </span>
           <p className="mt-0.5">
-            The values below represent parsed data from your test dossier. You can edit any field to test how corrections impact your readiness score. In production, this connects to the Python FastAPI backend with Tesseract/DocTR.
+            {t('reviewSimOCRBody', language)}
           </p>
         </div>
       </div>
@@ -101,10 +102,10 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
       <div className="bg-white rounded-xl shadow-sm border border-[#e6e8ea] overflow-hidden mb-8">
         <div className="px-6 py-4 border-b border-[#eceef0] flex items-center justify-between">
           <h2 className="font-headline-sm text-headline-sm text-[#000412] font-bold text-base">
-            Cross-Document Demographic Parameters
+            {t('reviewTableTitle', language)}
           </h2>
           <span className="text-xs text-[#44474d] bg-[#f2f4f6] px-2.5 py-1 rounded font-medium">
-            {extractedFields.length} Tracked Heuristics
+            {extractedFields.length} {t('reviewTrackedLabel', language)}
           </span>
         </div>
 
@@ -123,17 +124,17 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
                     </span>
                     {field.status === 'mismatch' && (
                       <span className="bg-[#dde1ff] text-[#001453] text-[10px] font-bold px-2 py-0.5 rounded-full">
-                        Variation Flagged
+                        {t('reviewVariationBadge', language)}
                       </span>
                     )}
                     {field.status === 'unverified' && (
                       <span className="bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold px-2 py-0.5 rounded-full">
-                        Pending Upload
+                        {t('reviewPendingBadge', language)}
                       </span>
                     )}
                     {field.status === 'clean' && (
                       <span className="bg-[#89f5e7] text-[#13968a] text-[10px] font-bold px-2 py-0.5 rounded-full">
-                        Clean Match
+                        {t('reviewCleanBadge', language)}
                       </span>
                     )}
                   </div>
@@ -151,14 +152,14 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
                         className="px-3 py-1.5 bg-[#0f1e36] text-white rounded-lg text-xs font-semibold hover:bg-[#3755c3] cursor-pointer"
                         type="button"
                       >
-                        Save
+                        {t('reviewSaveBtn', language)}
                       </button>
                       <button
                         onClick={() => setEditingId(null)}
                         className="px-2.5 py-1.5 bg-[#eceef0] text-[#44474d] rounded-lg text-xs hover:bg-[#e6e8ea] cursor-pointer"
                         type="button"
                       >
-                        Cancel
+                        {t('reviewCancelBtn', language)}
                       </button>
                     </div>
                   ) : (
@@ -168,7 +169,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
                   )}
 
                   <div className="flex flex-wrap items-center gap-3 mt-1.5 text-xs text-[#44474d]">
-                    <span className="text-[#3755c3] font-medium">Source: {field.sourceDoc}</span>
+                    <span className="text-[#3755c3] font-medium">{t('reviewSourceLabel', language)} {field.sourceDoc}</span>
                     {field.note && <span>• {field.note}</span>}
                   </div>
                 </div>
@@ -180,7 +181,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
                     type="button"
                   >
                     <span className="material-symbols-outlined text-[16px]">edit</span>
-                    <span>Edit Value</span>
+                    <span>{t('reviewEditBtn', language)}</span>
                   </button>
                 )}
               </div>
@@ -197,7 +198,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
           type="button"
         >
           <span className="material-symbols-outlined text-[18px]">arrow_back</span>
-          <span>Back to Upload Wizard</span>
+          <span>{t('reviewBackBtn', language)}</span>
         </button>
 
         <button
@@ -205,7 +206,7 @@ export const DocumentReviewScreen: React.FC<DocumentReviewScreenProps> = ({
           className="flex-1 sm:flex-none px-6 py-2.5 rounded-lg bg-[#3755c3] text-white text-xs font-semibold hover:bg-[#173bab] flex items-center justify-center gap-1.5 shadow-sm transition-all cursor-pointer"
           type="button"
         >
-          <span>Run Pre-Submission Audit &amp; View Report</span>
+          <span>{t('reviewRunAuditBtn', language)}</span>
           <span className="material-symbols-outlined text-[18px]">check_circle</span>
         </button>
       </div>

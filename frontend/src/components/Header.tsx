@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ScreenId, Language } from '../types';
+import { t } from '../i18n';
 
 interface HeaderProps {
   currentScreen: ScreenId;
@@ -19,13 +20,13 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const navItems: { id: ScreenId; labelEn: string; labelMr: string }[] = [
-    { id: 'home', labelEn: 'Home', labelMr: 'मुख्यपृष्ठ' },
-    { id: 'dashboard', labelEn: 'Dashboard', labelMr: 'डॅशबोर्ड' },
-    { id: 'scheme-selection', labelEn: 'Scheme Selection', labelMr: 'योजना निवड' },
-    { id: 'upload-wizard', labelEn: 'Upload Wizard', labelMr: 'कागदपत्रे अपलोड' },
-    { id: 'document-review', labelEn: 'Document Review', labelMr: 'तपासणी' },
-    { id: 'readiness-report', labelEn: 'Readiness Report', labelMr: 'तयारी अहवाल' },
+  const navItems: { id: ScreenId; labelKey: string }[] = [
+    { id: 'home', labelKey: 'navHome' },
+    { id: 'dashboard', labelKey: 'navDashboard' },
+    { id: 'scheme-selection', labelKey: 'navSchemeSelection' },
+    { id: 'upload-wizard', labelKey: 'navUploadWizard' },
+    { id: 'document-review', labelKey: 'navDocumentReview' },
+    { id: 'readiness-report', labelKey: 'navReadinessReport' },
   ];
 
   return (
@@ -36,17 +37,15 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-1.5 text-xs truncate">
             <span className="material-symbols-outlined text-[16px] text-[#3755c3] shrink-0">verified_user</span>
             <span className="truncate">
-              {language === 'mr'
-                ? 'स्वतंत्र सल्लागार साधन • महाराष्ट्र अर्जदारांसाठी गैर-शासकीय शिष्यवृत्ती तयारी तपासणी'
-                : 'Independent Advisory Tool • Non-governmental scholarship readiness checker for Maharashtra applicants'}
+              {t('advisoryStrip', language)}
             </span>
           </div>
           <div className="hidden sm:flex items-center gap-3 text-xs shrink-0">
             <span className="text-[#44474d]">
-              {language === 'mr' ? 'नागरिक सहाय्यता: कार्यरत' : 'Citizen Advisory Helpline: active'}
+              {t('citizenHelpline', language)}
             </span>
             <span className="h-3 w-px bg-[#c5c6ce]"></span>
-            <span className="text-[#3755c3] font-semibold">SPPU Intake 2024-25</span>
+            <span className="text-[#3755c3] font-semibold">{t('sppuIntake', language)}</span>
           </div>
         </div>
       </div>
@@ -64,14 +63,14 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="font-headline-sm text-headline-sm text-[#000412] tracking-tight font-bold">
-                MahaScholar Guard
+                {t('appName', language)}
               </span>
               <span className="bg-[#e6e8ea] text-[#44474d] text-[11px] px-1.5 py-0.5 rounded font-medium">
-                Beta
+                {t('betaBadge', language)}
               </span>
             </div>
             <span className="text-[11px] text-[#44474d] leading-none">
-              {language === 'mr' ? 'कागदपत्र तयारी सहाय्यक' : 'Document Readiness Assistant'}
+              {t('appTagline', language)}
             </span>
           </div>
         </div>
@@ -90,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
                     : 'text-[#44474d] hover:bg-[#e6e8ea] hover:text-[#191c1e]'
                 }`}
               >
-                {language === 'mr' ? item.labelMr : item.labelEn}
+                {t(item.labelKey, language)}
               </button>
             );
           })}
@@ -102,11 +101,11 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onToggleLanguage}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#eceef0] text-[#191c1e] hover:bg-[#e6e8ea] transition-colors text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#3755c3]"
-            title="Toggle English / Marathi"
+            title={language === 'mr' ? 'Switch to English' : 'मराठीमध्ये बदला'}
             type="button"
           >
             <span className="material-symbols-outlined text-[16px] text-[#3755c3]">translate</span>
-            <span className="hidden sm:inline">{language === 'mr' ? 'मराठी' : 'English / मराठी'}</span>
+            <span className="font-semibold">{language === 'mr' ? 'मराठी (MR)' : 'English (EN)'}</span>
           </button>
 
           {/* Notifications Button */}
@@ -114,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 rounded-lg text-[#44474d] hover:bg-[#e6e8ea] hover:text-[#191c1e] transition-colors focus:outline-none focus:ring-2 focus:ring-[#3755c3]"
-              aria-label="Notifications"
+              aria-label={t('notifications', language)}
               type="button"
             >
               <span className="material-symbols-outlined text-[20px]">notifications</span>
@@ -127,8 +126,10 @@ export const Header: React.FC<HeaderProps> = ({
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-[#c5c6ce] p-3 z-50 text-xs">
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#eceef0]">
-                  <span className="font-semibold text-[#191c1e]">Notifications</span>
-                  <span className="text-[10px] bg-[#dde1ff] text-[#001453] px-1.5 py-0.5 rounded">2 New</span>
+                  <span className="font-semibold text-[#191c1e]">{t('notifications', language)}</span>
+                  <span className="text-[10px] bg-[#dde1ff] text-[#001453] px-1.5 py-0.5 rounded">
+                    {t('notificationsNew', language)}
+                  </span>
                 </div>
                 <div className="space-y-2">
                   <div
@@ -138,8 +139,8 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className="p-2 rounded-lg bg-[#ffdad6]/40 hover:bg-[#ffdad6]/60 cursor-pointer transition-colors"
                   >
-                    <div className="font-semibold text-[#ba1a1a]">Action Required: Income Certificate</div>
-                    <div className="text-[11px] text-[#44474d]">Upload Tahsildar barcoded slip for AY 2024-25</div>
+                    <div className="font-semibold text-[#ba1a1a]">{t('notifIncomeTitle', language)}</div>
+                    <div className="text-[11px] text-[#44474d]">{t('notifIncomeBody', language)}</div>
                   </div>
                   <div
                     onClick={() => {
@@ -148,8 +149,8 @@ export const Header: React.FC<HeaderProps> = ({
                     }}
                     className="p-2 rounded-lg bg-[#dde1ff]/40 hover:bg-[#dde1ff]/60 cursor-pointer transition-colors"
                   >
-                    <div className="font-semibold text-[#173bab]">Name Mismatch Detected</div>
-                    <div className="text-[11px] text-[#44474d]">Aadhaar vs HSC Marksheet initials flagged</div>
+                    <div className="font-semibold text-[#173bab]">{t('notifNameTitle', language)}</div>
+                    <div className="text-[11px] text-[#44474d]">{t('notifNameBody', language)}</div>
                   </div>
                 </div>
               </div>
@@ -160,18 +161,18 @@ export const Header: React.FC<HeaderProps> = ({
           <div
             onClick={() => onNavigate('dashboard')}
             className="flex items-center gap-2 pl-1 py-1 rounded-lg cursor-pointer hover:bg-[#eceef0] transition-colors"
-            title="View Student Dashboard"
+            title={t('studentProfileTooltip', language)}
           >
             <div className="w-8 h-8 rounded-full bg-[#3755c3] text-white flex items-center justify-center font-bold text-xs">
               AD
             </div>
             <div className="hidden md:flex flex-col text-left">
               <span className="text-xs font-semibold text-[#191c1e] leading-tight">
-                Aarav Deshmukh (SPPU Pune)
+                {language === 'mr' ? 'आरव देशमुख (SPPU पुणे)' : 'Aarav Deshmukh (SPPU Pune)'}
               </span>
               <div className="flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#13968a]"></span>
-                <span className="text-[11px] text-[#44474d]">FY B.Tech (COEP)</span>
+                <span className="text-[11px] text-[#44474d]">{t('studentDegree', language)}</span>
               </div>
             </div>
           </div>
@@ -180,7 +181,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="xl:hidden p-2 rounded-lg text-[#44474d] hover:bg-[#e6e8ea]"
-            aria-label="Toggle menu"
+            aria-label={t('toggleMenu', language)}
             type="button"
           >
             <span className="material-symbols-outlined text-[24px]">
@@ -209,7 +210,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'text-[#44474d] hover:bg-[#eceef0]'
                   }`}
                 >
-                  {language === 'mr' ? item.labelMr : item.labelEn}
+                  {t(item.labelKey, language)}
                 </button>
               );
             })}

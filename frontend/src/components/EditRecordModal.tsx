@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { AuditReportData } from '../types';
+import { AuditReportData, Language } from '../types';
+import { t } from '../i18n';
 
 interface EditRecordModalProps {
   isOpen: boolean;
   onClose: () => void;
   reportData: AuditReportData;
   onSaveCandidateName: (newName: string) => void;
+  language?: Language;
 }
 
 export const EditRecordModal: React.FC<EditRecordModalProps> = ({
@@ -13,6 +15,7 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
   onClose,
   reportData,
   onSaveCandidateName,
+  language = 'en',
 }) => {
   const [candidateName, setCandidateName] = useState(reportData.studentName);
 
@@ -23,6 +26,8 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
     onClose();
   };
 
+  const isMr = language === 'mr';
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-[#c5c6ce] flex flex-col">
@@ -30,13 +35,14 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[#3755c3] text-[22px]">edit</span>
             <h3 className="font-headline-sm text-headline-sm text-[#000412] font-bold text-base">
-              Edit Candidate Identity Record
+              {t('editRecordTitle', language)}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-[#75777e] hover:bg-[#eceef0]"
+            className="p-1 rounded-lg text-[#75777e] hover:bg-[#eceef0] cursor-pointer"
             type="button"
+            aria-label={t('close', language)}
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -45,7 +51,7 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
         <div className="py-4 space-y-4 text-xs">
           <div>
             <label className="font-semibold text-[#191c1e] block mb-1">
-              Candidate Legal Name (as per SSC / Board Records)
+              {t('editRecordNameLabel', language)}
             </label>
             <input
               type="text"
@@ -54,31 +60,37 @@ export const EditRecordModal: React.FC<EditRecordModalProps> = ({
               onChange={(e) => setCandidateName(e.target.value)}
             />
             <span className="text-[11px] text-[#75777e] mt-1 block">
-              Ensure this matches your Board Qualifying Exam Passing Certificate.
+              {t('editRecordNameHint', language)}
             </span>
           </div>
 
           <div className="p-3 rounded-lg bg-[#f2f4f6] border border-[#e6e8ea]">
-            <span className="font-semibold text-[#000412] block mb-1">Aadhaar Format Comparison:</span>
-            <div className="font-mono text-[#44474d]">Aadhaar UID: DESHMUKH AARAV RAMESH</div>
-            <div className="font-mono text-[#ba1a1a] mt-0.5">Board Marksheet: DESHMUKH AARAV R.</div>
+            <span className="font-semibold text-[#000412] block mb-1">
+              {t('editRecordAadhaarComp', language)}
+            </span>
+            <div className="font-mono text-[#44474d]">
+              {isMr ? 'आधार UID स्वरूप: ' : 'Aadhaar UID: '}DESHMUKH AARAV RAMESH
+            </div>
+            <div className="font-mono text-[#ba1a1a] mt-0.5">
+              {isMr ? 'बोर्ड गुणपत्रिका: ' : 'Board Marksheet: '}DESHMUKH AARAV R.
+            </div>
           </div>
         </div>
 
         <div className="pt-4 border-t border-[#eceef0] flex items-center justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[#eceef0] text-[#191c1e] text-xs font-semibold hover:bg-[#e6e8ea]"
+            className="px-4 py-2 rounded-lg bg-[#eceef0] text-[#191c1e] text-xs font-semibold hover:bg-[#e6e8ea] cursor-pointer"
             type="button"
           >
-            Cancel
+            {t('cancel', language)}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3]"
+            className="px-4 py-2 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] cursor-pointer"
             type="button"
           >
-            Save Changes
+            {t('saveChanges', language)}
           </button>
         </div>
       </div>

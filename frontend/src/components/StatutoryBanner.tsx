@@ -1,5 +1,6 @@
 import React from 'react';
 import { Language } from '../types';
+import { t } from '../i18n';
 
 interface StatutoryBannerProps {
   language: Language;
@@ -15,11 +16,20 @@ export const StatutoryBanner: React.FC<StatutoryBannerProps> = ({ language }) =>
         <div className="flex flex-col md:flex-row md:items-center justify-between w-full gap-2">
           <div className="flex flex-col">
             <span className="font-label-md text-label-md text-[#191c1e] uppercase tracking-wider font-semibold">
-              {language === 'mr' ? 'स्वतंत्र नागरिक सल्लागार साधन' : 'Independent Citizen Advisory Tool'}
+              {t('independentAdvisory', language)}
             </span>
             <p className="font-body-sm text-body-sm text-[#44474d]">
-              MahaScholar Guard is an independent document readiness assistant for Maharashtra students. It is{' '}
-              <strong className="text-[#191c1e]">NOT an official government portal (MahaDBT)</strong> and does not evaluate, approve applications, or guarantee scholarship disbursements.
+              {language === 'mr' ? (
+                <>
+                  महास्कॉलर गार्ड हे महाराष्ट्रातील विद्यार्थ्यांसाठी स्वतंत्र कागदपत्र पूर्वतयारी सहाय्यक साधन आहे. हे{' '}
+                  <strong className="text-[#191c1e]">अधिकृत सरकारी पोर्टल (MahaDBT) नाही</strong> आणि ते अर्जांचे मूल्यमापन, मंजुरी अथवा शिष्यवृत्ती वितरणाची हमी देत नाही.
+                </>
+              ) : (
+                <>
+                  MahaScholar Guard is an independent document readiness assistant for Maharashtra students. It is{' '}
+                  <strong className="text-[#191c1e]">NOT an official government portal (MahaDBT)</strong> and does not evaluate, approve applications, or guarantee scholarship disbursements.
+                </>
+              )}
             </p>
           </div>
           <a
@@ -28,7 +38,7 @@ export const StatutoryBanner: React.FC<StatutoryBannerProps> = ({ language }) =>
             rel="noopener noreferrer"
             target="_blank"
           >
-            <span>Official MahaDBT</span>
+            <span>{t('officialMahaDBT', language)}</span>
             <span className="material-symbols-outlined text-[16px]">north_east</span>
           </a>
         </div>

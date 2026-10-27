@@ -6,6 +6,7 @@ import {
   createUploadedDocRecord,
   getSampleDossier,
 } from '../services/scholarshipService';
+import { t } from '../i18n';
 
 interface UploadWizardScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -30,7 +31,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
     const validation = validateDocumentFile(file, spec);
 
     if (!validation.valid) {
-      setErrorMessage(validation.error || 'Invalid file format or size.');
+      setErrorMessage(validation.error || t('uploadInvalidFile', language));
       return;
     }
 
@@ -49,7 +50,6 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
     onUpdateUploadedDocs(copy);
   };
 
-  // One-click demo dossier loader (Loads Aarav Deshmukh's documents with Income intentionally missing to showcase the 78% audit state!)
   const handleLoadSampleDossier = () => {
     setErrorMessage(null);
     const sampleDossier = getSampleDossier(selectedScheme.id);
@@ -58,6 +58,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
 
   const uploadedCount = Object.keys(uploadedDocs).length;
   const totalRequired = selectedScheme.requiredDocuments.length;
+  const schemeName = language === 'mr' ? selectedScheme.nameMr : selectedScheme.nameEn;
 
   return (
     <div className="flex flex-col w-full">
@@ -70,15 +71,15 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
           <div className="flex items-center gap-2 mb-1 text-[#3755c3]">
             <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
             <span className="text-xs uppercase font-semibold tracking-wider">
-              Step 02 of 04 • Document In-Memory Inspection
+              {t('uploadStepLabel', language)}
             </span>
           </div>
           <h1 className="font-headline-lg text-headline-lg text-[#000412] font-bold">
-            Upload Scholarship Documents
+            {t('uploadTitle', language)}
           </h1>
           <p className="font-body-md text-body-md text-[#44474d] mt-1">
-            Auditing requirements for:{' '}
-            <strong className="text-[#000412] font-semibold">{selectedScheme.nameEn}</strong>
+            {t('uploadAuditingFor', language)}{' '}
+            <strong className="text-[#000412] font-semibold">{schemeName}</strong>
           </p>
         </div>
 
@@ -89,7 +90,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
           type="button"
         >
           <span className="material-symbols-outlined text-[18px]">auto_fix_high</span>
-          <span>Load Sample Student Dossier (Aarav Deshmukh)</span>
+          <span>{t('uploadSampleBtn', language)}</span>
         </button>
       </div>
 
@@ -102,10 +103,10 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
           </div>
           <button
             onClick={() => setErrorMessage(null)}
-            className="text-xs font-bold hover:underline"
+            className="text-xs font-bold hover:underline cursor-pointer"
             type="button"
           >
-            Dismiss
+            {t('dismiss', language)}
           </button>
         </div>
       )}
@@ -117,10 +118,10 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
         </span>
         <div className="flex flex-col text-xs text-[#44474d]">
           <span className="font-semibold text-[#000412]">
-            Ephemeral In-Browser Processing (Zero Data Retention)
+            {t('uploadEphemeralTitle', language)}
           </span>
           <p className="mt-0.5">
-            Your certificates are inspected purely in client-side memory for schema and demographic verification. Files are never stored on external databases or sent to third parties.
+            {t('uploadEphemeralBody', language)}
           </p>
         </div>
       </div>
@@ -163,17 +164,17 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
                     </h3>
                     {docSpec.isMandatory ? (
                       <span className="bg-[#ffdad6] text-[#ba1a1a] text-[10px] font-bold px-1.5 py-0.5 rounded">
-                        Mandatory
+                        {t('mandatory', language)}
                       </span>
                     ) : (
                       <span className="bg-[#eceef0] text-[#44474d] text-[10px] px-1.5 py-0.5 rounded">
-                        Optional
+                        {t('optional', language)}
                       </span>
                     )}
                   </div>
 
                   <span className="text-xs text-[#3755c3] font-medium mt-0.5">
-                    Issuing Authority: {docSpec.issuingAuthority}
+                    {t('uploadIssuingAuth', language)} {docSpec.issuingAuthority}
                   </span>
 
                   <p className="text-xs text-[#44474d] mt-1 leading-relaxed">
@@ -181,7 +182,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
                   </p>
 
                   <span className="text-[11px] text-[#75777e] mt-1">
-                    Rule: {docSpec.instructionsEn} • Specs: Max {docSpec.maxSizeKb} KB ({docSpec.allowedExtensions.join(', ')})
+                    {t('uploadRule', language)} {docSpec.instructionsEn} • {t('uploadSpecs', language)} {t('uploadMax', language)} {docSpec.maxSizeKb} KB ({docSpec.allowedExtensions.join(', ')})
                   </span>
                 </div>
               </div>
@@ -203,8 +204,8 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
                     </div>
                     <button
                       onClick={() => handleRemoveDoc(docSpec.code)}
-                      className="p-1 text-[#ba1a1a] hover:bg-[#ffdad6] rounded transition-colors"
-                      title="Remove document"
+                      className="p-1 text-[#ba1a1a] hover:bg-[#ffdad6] rounded transition-colors cursor-pointer"
+                      title={t('uploadRemoveTitle', language)}
                       type="button"
                     >
                       <span className="material-symbols-outlined text-[18px]">delete</span>
@@ -215,7 +216,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
                     <span className="material-symbols-outlined text-[18px] text-[#3755c3]">
                       upload_file
                     </span>
-                    <span>Upload File</span>
+                    <span>{t('uploadFileBtn', language)}</span>
                     <input
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
@@ -238,7 +239,7 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
       <div className="bg-white p-4 rounded-xl shadow-md border border-[#c5c6ce] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className="text-xs font-semibold text-[#191c1e]">
-            {uploadedCount} of {totalRequired} Documents Attached
+            {uploadedCount} {t('uploadOf', language)} {totalRequired} {t('uploadDocsAttached', language)}
           </span>
           <div className="w-32 bg-[#e6e8ea] h-2 rounded-full overflow-hidden">
             <div
@@ -254,14 +255,14 @@ export const UploadWizardScreen: React.FC<UploadWizardScreenProps> = ({
             className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-[#eceef0] text-[#191c1e] text-xs font-semibold hover:bg-[#e6e8ea] cursor-pointer"
             type="button"
           >
-            Back to Schemes
+            {t('uploadBackSchemes', language)}
           </button>
           <button
             onClick={() => onNavigate('document-review')}
             className="flex-1 sm:flex-none px-5 py-2.5 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] transition-colors flex items-center justify-center gap-1.5 shadow-sm cursor-pointer"
             type="button"
           >
-            <span>Proceed to OCR Extracted Data Review</span>
+            <span>{t('uploadProceedBtn', language)}</span>
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
         </div>

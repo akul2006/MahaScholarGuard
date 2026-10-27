@@ -1,15 +1,19 @@
 import React from 'react';
+import { Language } from '../types';
+import { t } from '../i18n';
 
 interface WalkthroughModalProps {
   isOpen: boolean;
   onClose: () => void;
   onStartAudit: () => void;
+  language?: Language;
 }
 
 export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
   isOpen,
   onClose,
   onStartAudit,
+  language = 'en',
 }) => {
   if (!isOpen) return null;
 
@@ -23,17 +27,18 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
             </div>
             <div>
               <h3 className="font-headline-sm text-headline-sm text-[#000412] font-bold">
-                Verification Walkthrough
+                {t('walkthroughTitle', language)}
               </h3>
               <p className="text-xs text-[#44474d]">
-                How MahaScholar Guard audits your documents in 4 simple stages
+                {t('walkthroughSubtext', language)}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#75777e] hover:bg-[#eceef0] hover:text-[#191c1e]"
+            className="p-1.5 rounded-lg text-[#75777e] hover:bg-[#eceef0] hover:text-[#191c1e] cursor-pointer"
             type="button"
+            aria-label={t('close', language)}
           >
             <span className="material-symbols-outlined text-[20px]">close</span>
           </button>
@@ -45,9 +50,11 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
               1
             </span>
             <div>
-              <h4 className="font-label-lg text-[#000412] font-semibold">Deterministic Scheme Checklist</h4>
-              <p className="text-xs text-[#44474d] mt-0.5">
-                Each Maharashtra department (DTE, Social Justice, Tribal, OBC) imposes distinct mandates. EBC requires Tahsildar Income ≤ 8L, while SC/ST mandates Caste Validity from Scrutiny Committees.
+              <h4 className="font-label-lg text-[#000412] font-semibold">
+                {t('walkthroughStep1Title', language)}
+              </h4>
+              <p className="text-xs text-[#44474d] mt-0.5 leading-relaxed">
+                {t('walkthroughStep1Body', language)}
               </p>
             </div>
           </div>
@@ -57,9 +64,11 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
               2
             </span>
             <div>
-              <h4 className="font-label-lg text-[#000412] font-semibold">Zero-Storage In-Memory Inspection</h4>
-              <p className="text-xs text-[#44474d] mt-0.5">
-                Files are evaluated locally in memory. No Aadhaar numbers, bank accounts, or sensitive documents are uploaded to cloud servers or databases.
+              <h4 className="font-label-lg text-[#000412] font-semibold">
+                {t('walkthroughStep2Title', language)}
+              </h4>
+              <p className="text-xs text-[#44474d] mt-0.5 leading-relaxed">
+                {t('walkthroughStep2Body', language)}
               </p>
             </div>
           </div>
@@ -69,9 +78,11 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
               3
             </span>
             <div>
-              <h4 className="font-label-lg text-[#000412] font-semibold">Cross-Document Discrepancy Flagging</h4>
-              <p className="text-xs text-[#44474d] mt-0.5">
-                Detects minor name differences between Board Marksheets and Aadhaar (e.g. &ldquo;Aarav R.&rdquo; vs &ldquo;Aarav Ramesh&rdquo;) and alerts you to carry an Annexure A self-affidavit to your college desk.
+              <h4 className="font-label-lg text-[#000412] font-semibold">
+                {t('walkthroughStep3Title', language)}
+              </h4>
+              <p className="text-xs text-[#44474d] mt-0.5 leading-relaxed">
+                {t('walkthroughStep3Body', language)}
               </p>
             </div>
           </div>
@@ -81,9 +92,11 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
               4
             </span>
             <div>
-              <h4 className="font-label-lg text-[#000412] font-semibold">College-Ready Remediation Slip</h4>
-              <p className="text-xs text-[#44474d] mt-0.5">
-                Export an instant PDF summary to present directly to your college Scholarship Clerk or Nodal Officer at SPPU/COEP before submitting on mahadbt.maharashtra.gov.in.
+              <h4 className="font-label-lg text-[#000412] font-semibold">
+                {t('walkthroughStep4Title', language)}
+              </h4>
+              <p className="text-xs text-[#44474d] mt-0.5 leading-relaxed">
+                {t('walkthroughStep4Body', language)}
               </p>
             </div>
           </div>
@@ -92,20 +105,20 @@ export const WalkthroughModal: React.FC<WalkthroughModalProps> = ({
         <div className="pt-4 border-t border-[#eceef0] flex items-center justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-[#eceef0] text-[#191c1e] text-xs font-semibold hover:bg-[#e6e8ea]"
+            className="px-4 py-2 rounded-lg bg-[#eceef0] text-[#191c1e] text-xs font-semibold hover:bg-[#e6e8ea] cursor-pointer"
             type="button"
           >
-            Close
+            {t('close', language)}
           </button>
           <button
             onClick={() => {
               onClose();
               onStartAudit();
             }}
-            className="px-4 py-2 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] flex items-center gap-1 shadow-sm"
+            className="px-4 py-2 rounded-lg bg-[#0f1e36] text-white text-xs font-semibold hover:bg-[#3755c3] cursor-pointer flex items-center gap-1.5"
             type="button"
           >
-            <span>Start My Document Audit</span>
+            <span>{t('walkthroughStartBtn', language)}</span>
             <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
           </button>
         </div>

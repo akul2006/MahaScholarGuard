@@ -1,5 +1,6 @@
 import React from 'react';
 import { Language } from '../types';
+import { t } from '../i18n';
 
 interface FooterProps {
   language: Language;
@@ -18,12 +19,10 @@ export const Footer: React.FC<FooterProps> = ({ language, onOpenPrivacyModal, on
           </span>
           <div className="flex flex-col gap-1">
             <span className="font-label-lg text-label-lg text-[#191c1e] font-semibold">
-              {language === 'mr' ? 'वैधानिक व सल्लागार अस्वीकरण' : 'Statutory & Advisory Disclaimer'}
+              {t('statutoryDisclaimer', language)}
             </span>
             <p className="font-body-sm text-body-sm text-[#44474d] leading-relaxed">
-              {language === 'mr'
-                ? 'महास्कॉलर गार्ड हे स्वतंत्र पूर्वतयारी सहाय्यक साधन आहे. याचा महाडीबीटी (MahaDBT) किंवा महाराष्ट्र शासनाच्या कोणत्याही विभागाशी थेट संबंध किंवा संलग्नता नाही. हे साधन शिष्यवृत्ती मंजूर करत नाही अथवा अनुदानाची हमी देत नाही. mahadbt.maharashtra.gov.in वर अंतिम अर्ज करण्यापूर्वी कागदपत्रांतील त्रुटी तपासण्यासाठी हे साधन वापरले जाते.'
-                : 'MahaScholar Guard is an independent preparation assistant, not affiliated with or endorsed by MahaDBT or any government department. Does not grant approvals or guarantee scholarships. All status ratings denote personal readiness heuristics prior to official submission on mahadbt.maharashtra.gov.in.'}
+              {t('statutoryText', language)}
             </p>
           </div>
         </div>
@@ -32,26 +31,26 @@ export const Footer: React.FC<FooterProps> = ({ language, onOpenPrivacyModal, on
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 font-body-sm text-body-sm text-[#44474d]">
           <div className="flex items-center gap-3">
             <span className="font-label-md text-label-md text-[#191c1e] font-semibold">
-              © 2025 MahaScholar Guard
+              {t('footerCopyright', language)}
             </span>
             <span>•</span>
-            <span>Pune University Guidance Chapter</span>
+            <span>{t('footerChapter', language)}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs">
             <button
               onClick={onOpenPrivacyModal}
-              className="hover:text-[#191c1e] transition-colors underline-offset-4 hover:underline text-[#44474d]"
+              className="hover:text-[#191c1e] transition-colors underline-offset-4 hover:underline text-[#44474d] cursor-pointer"
               type="button"
             >
-              Privacy Directive
+              {t('privacyDirective', language)}
             </button>
             <button
               onClick={onOpenSafetyModal}
-              className="hover:text-[#191c1e] transition-colors underline-offset-4 hover:underline text-[#44474d]"
+              className="hover:text-[#191c1e] transition-colors underline-offset-4 hover:underline text-[#44474d] cursor-pointer"
               type="button"
             >
-              Document Safety Standard
+              {t('documentSafety', language)}
             </button>
             <a
               href="https://mahadbt.maharashtra.gov.in"
@@ -59,10 +58,9 @@ export const Footer: React.FC<FooterProps> = ({ language, onOpenPrivacyModal, on
               rel="noopener noreferrer"
               className="hover:text-[#3755c3] transition-colors font-semibold flex items-center gap-1"
             >
-              <span>MahaDBT Official Portal Link</span>
+              <span>mahadbt.maharashtra.gov.in</span>
               <span className="material-symbols-outlined text-[14px]">north_east</span>
             </a>
-            <span className="text-[#75777e]">Support Desk: support@mahascholarguard.org</span>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
 import { ScreenId, Language, ScholarshipScheme } from '../types';
-import { fetchScholarshipSchemes } from '../services/scholarshipService';
+import { fetchScholarshipSchemes, MOCK_SCHEMES } from '../services/scholarshipService';
 
 interface SchemeSelectionScreenProps {
   onNavigate: (screen: ScreenId) => void;
@@ -19,12 +19,24 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
   const [schemes, setSchemes] = useState<ScholarshipScheme[]>([]);
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [catalogSource, setCatalogSource] = useState<'loading' | 'api' | 'fallback'>('loading');
 
   useEffect(() => {
     let isMounted = true;
-    fetchScholarshipSchemes().then((data) => {
-      if (isMounted) setSchemes(data);
-    });
+
+    fetchScholarshipSchemes()
+      .then((data) => {
+        if (!isMounted) return;
+        setSchemes(data);
+        setCatalogSource('api');
+      })
+      .catch(() => {
+        // Keep the prototype usable during backend outages, but make fallback explicit.
+        if (!isMounted) return;
+        setSchemes(MOCK_SCHEMES);
+        setCatalogSource('fallback');
+      });
+
     return () => {
       isMounted = false;
     };
@@ -61,6 +73,21 @@ export const SchemeSelectionScreen: React.FC<SchemeSelectionScreenProps> = ({
           Choose the scheme applicable to your social category, family income bracket, and degree course. Each scheme runs a deterministic document checklist audit.
         </p>
       </div>
+
+      {catalogSource !== 'api' && (
+        <div
+          role="status"
+          className={`p-3 rounded-lg mb-4 text-xs border ${
+            catalogSource === 'loading'
+              ? 'bg-[#f2f4f6] border-[#c5c6ce] text-[#44474d]'
+              : 'bg-[#fff4e5] border-[#f0c36d] text-[#6b4b00]'
+          }`}
+        >
+          {catalogSource === 'loading'
+            ? 'Loading scheme catalogue from the backend…'
+            : 'Backend catalogue unavailable. Showing prototype fallback data; verify scheme requirements on the official MahaDBT portal.'}
+        </div>
+      )}
 
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-[#e6e8ea] mb-6 flex flex-col md:flex-row items-center justify-between gap-4">

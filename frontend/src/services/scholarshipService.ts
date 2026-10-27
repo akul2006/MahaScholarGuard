@@ -466,16 +466,69 @@ export const INITIAL_AUDIT_REPORT: AuditReportData = {
 /**
  * Service API Methods
  */
+interface SchemeCatalogItem {
+  id: string;
+  code: string;
+  nameEn: string;
+  nameMr: string;
+  departmentEn: string;
+  departmentMr: string;
+  category: string;
+  officialPortalUrl: string;
+  catalogStatus: 'prototype_unverified';
+}
+
+interface SchemeCatalogResponse {
+  items: SchemeCatalogItem[];
+  count: number;
+  catalogStatus: 'prototype_unverified';
+}
+
+/**
+ * Loads scheme metadata from FastAPI and merges it with the existing prototype
+ * records. Document requirements and eligibility rules remain prototype data
+ * and must not be treated as official or current until verified.
+ */
 export async function fetchScholarshipSchemes(): Promise<ScholarshipScheme[]> {
-  // FUTURE FASTAPI CALL: return await (await fetch(`${API_BASE_URL}/schemes`)).json();
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(MOCK_SCHEMES), 80);
+  const response = await fetch(`${API_BASE_URL}/api/schemes`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Could not load scholarship schemes (HTTP ${response.status}).`);
+  }
+
+  const payload: SchemeCatalogResponse = await response.json();
+  if (
+    !payload ||
+    !Array.isArray(payload.items) ||
+    payload.catalogStatus !== 'prototype_unverified'
+  ) {
+    throw new Error('The scholarship catalogue response was not in the expected format.');
+  }
+
+  const serverById = new Map(payload.items.map((item) => [item.id, item]));
+  return MOCK_SCHEMES.map((localScheme) => {
+    const serverScheme = serverById.get(localScheme.id);
+    if (!serverScheme) return localScheme;
+
+    return {
+      ...localScheme,
+      code: serverScheme.code,
+      nameEn: serverScheme.nameEn,
+      nameMr: serverScheme.nameMr,
+      departmentEn: serverScheme.departmentEn,
+      departmentMr: serverScheme.departmentMr,
+      category: serverScheme.category,
+      officialPortalUrl: serverScheme.officialPortalUrl,
+    };
   });
 }
 
 export async function fetchSchemeById(schemeId: string): Promise<ScholarshipScheme | undefined> {
-  // FUTURE FASTAPI CALL: return await (await fetch(`${API_BASE_URL}/schemes/${schemeId}`)).json();
-  return MOCK_SCHEMES.find((s) => s.id === schemeId);
+  const schemes = await fetchScholarshipSchemes();
+  return schemes.find((scheme) => scheme.id === schemeId);
 }
 
 export async function fetchExtractedFields(prepId: string): Promise<ExtractedField[]> {

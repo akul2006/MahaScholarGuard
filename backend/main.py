@@ -32,6 +32,66 @@ app.add_middleware(
 )
 
 
+# Prototype catalogue metadata only. Detailed document requirements remain in the
+# frontend prototype until they are reviewed against current official scheme rules.
+SCHEME_CATALOG = [
+    {
+        "id": "spp-ebc-01",
+        "code": "RJC-SHAHU-EBC",
+        "nameEn": "Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Yojna (EBC)",
+        "nameMr": "राजर्षी छत्रपती शाहू महाराज शिक्षण शुल्क शिष्यवृत्ती योजना (ईबीसी)",
+        "departmentEn": "Higher & Technical Education Department (DTE/DHE)",
+        "departmentMr": "उच्च व तंत्रशिक्षण विभाग",
+        "category": "EBC",
+        "officialPortalUrl": "https://mahadbt.maharashtra.gov.in",
+        "catalogStatus": "prototype_unverified",
+    },
+    {
+        "id": "spp-sc-02",
+        "code": "POST-MATRIC-SC",
+        "nameEn": "Post-Matric Scholarship for Scheduled Caste (SC) Students",
+        "nameMr": "अनुसूचित जातीच्या विद्यार्थ्यांसाठी मॅट्रिकोत्तर शिष्यवृत्ती",
+        "departmentEn": "Social Justice & Special Assistance Department",
+        "departmentMr": "सामाजिक न्याय व विशेष सहाय्य विभाग",
+        "category": "SC",
+        "officialPortalUrl": "https://mahadbt.maharashtra.gov.in",
+        "catalogStatus": "prototype_unverified",
+    },
+    {
+        "id": "spp-obc-03",
+        "code": "POST-MATRIC-OBC",
+        "nameEn": "Post-Matric Scholarship for OBC / VJNT / SBC Students",
+        "nameMr": "इतर मागास वर्ग (OBC), विमुक्त जाती व भटक्या जमाती (VJNT) शिष्यवृत्ती",
+        "departmentEn": "VJNT, OBC & SBC Welfare Department",
+        "departmentMr": "इतर मागास बहुजन कल्याण विभाग",
+        "category": "OBC",
+        "officialPortalUrl": "https://mahadbt.maharashtra.gov.in",
+        "catalogStatus": "prototype_unverified",
+    },
+    {
+        "id": "spp-st-04",
+        "code": "POST-MATRIC-ST",
+        "nameEn": "Post-Matric Scholarship Scheme for Scheduled Tribes (ST)",
+        "nameMr": "अनुसूचित जमातीच्या विद्यार्थ्यांसाठी मॅट्रिकोत्तर शिष्यवृत्ती",
+        "departmentEn": "Tribal Development Department",
+        "departmentMr": "आदिवासी विकास विभाग",
+        "category": "ST",
+        "officialPortalUrl": "https://mahadbt.maharashtra.gov.in",
+        "catalogStatus": "prototype_unverified",
+    },
+]
+
+
+@app.get("/api/schemes")
+def list_scholarship_schemes():
+    """Return prototype scheme catalogue metadata; not an official eligibility source."""
+    return {
+        "items": SCHEME_CATALOG,
+        "count": len(SCHEME_CATALOG),
+        "catalogStatus": "prototype_unverified",
+    }
+
+
 @app.get("/")
 def root():
     return {

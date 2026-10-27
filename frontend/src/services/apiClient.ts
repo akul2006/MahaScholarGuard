@@ -1,0 +1,92 @@
+/**
+ * MahaScholar Guard - Centralized API Client
+ * Manages communication with the FastAPI backend service.
+ */
+
+export interface HealthResponse {
+  status: string;
+  service: string;
+  version: string;
+}
+
+export type ConnectionState = 'checking' | 'connected' | 'error';
+
+export interface HealthCheckResult {
+  state: ConnectionState;
+  message: string;
+  data?: HealthResponse;
+}
+
+/**
+ * Backend base URL read from VITE_API_BASE_URL, defaulting to http://127.0.0.1:8000.
+ * Strips trailing slashes to guarantee clean URL path composition.
+ */
+export const API_BASE_URL: string = (
+  import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
+).replace(/\/+$/, '');
+
+const DEFAULT_TIMEOUT_MS = 6000;
+
+/**
+ * Checks backend connectivity via GET /api/health.
+ * Handles timeouts, network failures, and external abort signals gracefully.
+ */
+export async function checkBackendHealth(signal?: AbortSignal): Promise<HealthResponse> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+
+  if (signal) {
+    if (signal.aborted) {
+      clearTimeout(timeoutId);
+      controller.abort();
+    } else {
+      signal.addEventListener('abort', () => controller.abort(), { once: true });
+    }
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/health`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data: HealthResponse = await response.json();
+
+    if (!data || data.status !== 'ok') {
+      throw new Error('Unexpected response format from backend health endpoint');
+    }
+
+    return data;
+  } catch (error: unknown) {
+    // If request was aborted by component unmounting, rethrow to be ignored safely
+    if (signal?.aborted) {
+      throw new DOMException('Request aborted by caller', 'AbortError');
+    }
+
+    // Timeout occurred
+    if (controller.signal.aborted) {
+      throw new Error('Connection timed out. Check that the FastAPI server is running.');
+    }
+
+    // Known Error
+    if (error instanceof Error) {
+      // Avoid raw browser error dumps or stack traces
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        throw new Error('Cannot connect. Check that the FastAPI server is running.');
+      }
+      throw new Error(error.message);
+    }
+
+    throw new Error('Cannot connect to backend service.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+

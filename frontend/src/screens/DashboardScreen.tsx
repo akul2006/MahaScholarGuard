@@ -1,5 +1,6 @@
 import React from 'react';
 import { StatutoryBanner } from '../components/StatutoryBanner';
+import BackendConnectionTest from '../components/BackendConnectionTest';
 import { ScreenId, Language, AuditReportData } from '../types';
 
 interface DashboardScreenProps {
@@ -242,6 +243,9 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({
 
         {/* Right Column: Deadlines & Quick Actions */}
         <div className="lg:col-span-4 flex flex-col gap-6">
+          {/* Live FastAPI Backend Connection Indicator */}
+          <BackendConnectionTest />
+
           {/* Key Maharashtra Portal Deadlines */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-[#e6e8ea]">
             <div className="flex items-center gap-2 mb-3">

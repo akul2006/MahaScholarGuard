@@ -16,8 +16,15 @@ import {
   RequiredDocumentSpec,
   FindingStatus,
 } from '../types';
+import { API_BASE_URL } from './apiClient';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+/**
+ * Service Layer Separation:
+ * 1. API Communication: Managed via `apiClient.ts`
+ * 2. Scheme Catalog & Metadata: `MOCK_SCHEMES`, `fetchScholarshipSchemes`, `fetchSchemeById`
+ * 3. Document Ingestion & Validation: `validateDocumentFile`, `createUploadedDocRecord`, `getSampleDossier`
+ * 4. Audit & Readiness Evaluation: `generateAuditReport`
+ */
 
 // Supported Maharashtra Schemes Catalog
 export const MOCK_SCHEMES: ScholarshipScheme[] = [
